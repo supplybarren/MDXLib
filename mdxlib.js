@@ -8,6 +8,20 @@ var biggestwidth = 0;
 var globaltime = Globals.Realtime();
 //#endregion
 
+//#region Javascript function definitions
+if (!Object.entries) {
+    Object.entries = function (obj) {
+        var ownProps = Object.keys(obj),
+            i = ownProps.length,
+            resArray = new Array(i); // preallocate the Array
+        while (i--)
+            resArray[i] = obj[ownProps[i]];
+
+        return resArray;
+    };
+}
+//#endregion
+
 var Base64 = {
     _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
     encode : function (input) {
@@ -106,20 +120,6 @@ var Base64 = {
     } 
 }
 
-//#region Javascript function definitions
-if (!Object.entries) {
-    Object.entries = function (obj) {
-        var ownProps = Object.keys(obj),
-            i = ownProps.length,
-            resArray = new Array(i); // preallocate the Array
-        while (i--)
-            resArray[i] = obj[ownProps[i]];
-
-        return resArray;
-    };
-}
-//#endregion
-
 function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, bg_col_top, bg_col_bottom) {
     if (typeof (bg_col_top) === 'undefined' || typeof (bg_col_bottom) === 'undefined') {
         Render.FilledRect(gx, gy, gwidth, gheight, [9, 9, 9, 255]);
@@ -139,12 +139,21 @@ function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, bg_col_top, bg
 
 //#region MDXTab
 function MDXTab(tabName, visible, x, y) {
-    this.tabName = tabName;
-    this.visible = visible;
-    this.x = x;
-    this.y = y;
+    if (typeof (MDXTab.instances[tabName]) === 'undefined') {
+        this.tabName = tabName;
+        this.visible = visible;
+        this.x = x;
+        this.y = y;
 
-    MDXTab.instances[tabName] = this;
+        MDXTab.instances[tabName] = this;
+    } else {
+        this.tabName = tabName;
+        this.visible = MDXTab.instances[tabName].visible;
+        this.x = x;
+        this.y = y;
+
+        MDXTab.instances[tabName] = this;
+    }
 }
 
 MDXTab.instances = {};
@@ -155,6 +164,7 @@ MDXTab.prototype.getTabName = function () {
 
 MDXTab.prototype.setTabName = function (tabName) {
     this.tabName = tabName;
+    return this;
 }
 
 MDXTab.prototype.getTabVisibility = function () {
@@ -163,6 +173,7 @@ MDXTab.prototype.getTabVisibility = function () {
 
 MDXTab.prototype.setTabVisibility = function (visible) {
     this.visible = visible;
+    return this;
 }
 
 MDXTab.prototype.getTabX = function () {
@@ -171,6 +182,7 @@ MDXTab.prototype.getTabX = function () {
 
 MDXTab.prototype.setTabX = function (x) {
     this.x = x;
+    return this;
 }
 
 MDXTab.prototype.getTabY = function () {
@@ -179,6 +191,7 @@ MDXTab.prototype.getTabY = function () {
 
 MDXTab.prototype.setTabY = function (y) {
     this.y = y;
+    return this;
 }
 
 function MDXtab(mdxTab) {
@@ -204,7 +217,8 @@ function MDXtab(mdxTab) {
             a = 200;
             hoveredWidth = 3;
             stringX += 1;
-            Object.entries(MDXTab.instances).forEach(function (instance) {
+
+            Object.entries(MDXTab.instances).forEach(function (instance, key) {
                 if (instance.getTabName() != mdxTab.getTabName()) {
                     instance.setTabVisibility(false);
                 } else {
@@ -283,7 +297,7 @@ function MDXslider(text, gx, gy, val, max) {
         }
     }
     Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
-    if (val != 0){
+    if (val != 0) {
         Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
         Render.Rect(gx + 1, gy + 13, val - 2, 8, [r, g, b, 255]);
     }
@@ -314,7 +328,7 @@ function MDXverticalslider(text, gx, gy, val, max, centered) {
             relval = val * max;
         }
     }
-    if (val != 0){
+    if (val != 0) {
         Render.GradientRect(gx + 2, gy + 15 + 90 - val - 4, 6, val, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
         Render.Rect(gx + 1, gy + 13 + 90 - val - 2, 8, val, [r, g, b, 255]);
     }
@@ -366,7 +380,7 @@ function MDXcolorslider(text, gx, gy, val, color) {
     }
     if (color == "alpha") {
         Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [200, 200, 200, 255], [150, 150, 150, 255]);
-        Render.Rect(gx + 1, gy + 13, val - 2, 8, [200, 200, 200, 255]); 
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [200, 200, 200, 255]);
         Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
     }
     Render.Rect(gx - 1, gy + 11, 257, 12, [45, 45, 45, 255]);
@@ -516,7 +530,11 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
     Render.Rect(gx, gy + 12, 25, 15, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 27, 17, [27, 27, 27, 255]);
-    Render.GradientRect(gx + 2, gy + 14, 21, 11, 0, [ar, ag, ab, aa], [ag - 20, ag - 30, ab - 50, aa]);
+    Render.FilledRect(gx + 2, gy + 14, 10, 5, [214, 214, 214, 255]);
+    Render.FilledRect(gx + 12, gy + 14, 11, 5, [255, 255, 255, 255]);
+    Render.FilledRect(gx + 2, gy + 19, 10, 6, [255, 255, 255, 255]);
+    Render.FilledRect(gx + 12, gy + 19, 11, 6, [214, 214, 214, 255]);
+    Render.FilledRect(gx + 2, gy + 14, 21, 11, [ar, ag, ab, aa]);
 
     return {
         r: returnr,
@@ -526,6 +544,16 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     };
 }
 
+function MDXsaveconfig(json){
+    var config = Base64.encode(json);
+    Cheat.ExecuteCommand("xbox_throttlespoof " + config);
+}
+
+function MDXloadconfig(){
+    var config = Base64.decode(Convar.GetString("xbox_throttlespoof"));
+    return config;
+}
+
 //#region Exported variables
 exports.agx = agx;
 exports.agy = agy;
@@ -533,10 +561,8 @@ exports.agy = agy;
 
 //#region Exported functions
 exports.menu = MDXmenu;
-
 exports.tab = MDXtab;
 exports.MDXTab = MDXTab;
-
 exports.drag = MDXdrag;
 exports.checkbox = MDXcheckbox;
 exports.slider = MDXslider;
@@ -546,4 +572,7 @@ exports.button = MDXbutton;
 exports.dropdown = MDXdropdown;
 exports.textbox = MDXtextbox;
 exports.colorpicker = MDXcolorpicker;
+exports.saveconfig = MDXsaveconfig;
+exports.loadconfig = MDXloadconfig;
+exports.base = Base64;
 //#endregion
