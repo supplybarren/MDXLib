@@ -20,19 +20,19 @@ var ag = 10;
 var ab = 40;
 var aa = 255;
 
-var tabgy = MDX.agy + 30;
-var myTab1 = new MDX.MDXTab("tab1", true, MDX.agx + 10, tabgy);
-var myTab2 = new MDX.MDXTab("tab2", false, MDX.agx + 10, tabgy + 20);
-
 function main() {
+    var tabBaseY = MDX.agy + 30;
     var sx = MDX.agx + 143;
-    var sy = tabgy;
+    var sy = tabBaseY;
 
     MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200) {
         MDX.agx = MDX.drag(MDX.agx, MDX.agy).x - 150;
         MDX.agy = MDX.drag(MDX.agx, MDX.agy).y - 10;
     }
+
+    var myTab1 = new MDX.MDXTab("tab1", true, MDX.agx + 10, tabBaseY);
+    var myTab2 = new MDX.MDXTab("tab2", false, MDX.agx + 10, tabBaseY + 20);
 
     MDX.tab(myTab1);
     MDX.tab(myTab2);
