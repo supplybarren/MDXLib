@@ -520,12 +520,23 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     if (open) {
         Render.Rect(gx - 3, gy + 9, 31, 21, [r, g, b, 255]);
         texty = gy - 2;
-        Render.FilledRect(gx - 2, gy + 35, 270, 110, [9, 9, 9, 255]);
-        Render.Rect(gx - 2, gy + 35, 270, 110, [27, 27, 27, 255]);
+        Render.FilledRect(gx - 2, gy + 35, 270, 135, [9, 9, 9, 255]);
+        Render.Rect(gx - 2, gy + 35, 270, 135, [27, 27, 27, 255]);
         returnr = MDXcolorslider("red", gx + 5, gy + 40, returnr, "red");
         returng = MDXcolorslider("green", gx + 5, gy + 65, returng, "green");
         returnb = MDXcolorslider("blue", gx + 5, gy + 90, returnb, "blue");
         returna = MDXcolorslider("alpha", gx + 5, gy + 115, returna, "alpha");
+        if (MDXbutton("Copy", gx + 5, gy + 145)){
+            var color = Base64.encode('{"r":' + returnr + ', "g":' + returng + ', "b":' + returnb + ', "a":' + returna + '}');
+            Cheat.ExecuteCommand("xbox_throttlebias " + color);
+        }
+        if (MDXbutton("Paste", gx + 60, gy + 145)){
+            var savedcolor = JSON.parse(Base64.decode(Convar.GetString("xbox_throttlebias")));
+            returnr = savedcolor.r;
+            returng = savedcolor.g;
+            returnb = savedcolor.b;
+            returna = savedcolor.a;
+        }
     }
     Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
     Render.Rect(gx, gy + 12, 25, 15, [0, 0, 0, 255]);
