@@ -11,6 +11,8 @@
  
  Now in your main drawing function we can begin creating our GUI
  ```javascript
+ var checkboxvalue = false;
+ // ^^ this is the value the checkbox will be checking/changing
  function main(){
   //initialize our menu
   MDX.menu("MDX", "GUI", MGX.agx, MDX.agy, 500, 300);
@@ -24,8 +26,6 @@
   
   //now we can start building our controls
   //if we want a checkbox on our menu we can easily add it
-  //we must define the variable the checkbox will be changing OUTSIDE of our main loop so somewhere outside add the following:
-  var checkboxvalue = false;
   //now back to the checkbox
   MDX.checkbox("checkbox", MDX.agx + 50, MDX.agy + 50, checkboxvalue);
   //the string in quotes is our checkbox text, MDX.agx is our X value, MDX.agy is our Y value, and checkboxvalue is the changing value.
