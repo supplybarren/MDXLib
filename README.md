@@ -13,6 +13,10 @@
  ```javascript
  var checkboxvalue = false;
  // ^^ this is the value the checkbox will be checking/changing
+ 
+ // Declare the tab. Syntax: var variableName = new MDX.MDXTab("tabName", boolVisibility, coordX, coordY);
+ // Important: you should declare your tab OUTSIDE of any loop!
+ var myTab1 = new MDX.MDXTab("tab1", true, MDX.agx + 10, MDX.agy + 30);
  function main(){
   //initialize our menu
   MDX.menu("MDX", "GUI", MGX.agx, MDX.agy, 500, 300);
@@ -28,6 +32,14 @@
   //if we want a checkbox on our menu we can easily add it
   MDX.checkbox("checkbox", MDX.agx + 50, MDX.agy + 50, checkboxvalue);
   //the string in quotes is our checkbox text, MDX.agx is our X value, MDX.agy is our Y value, and checkboxvalue is the changing value.
+  
+  // Just call MDX.tab with our MDXTab object
+  MDX.tab(myTab1);
+  
+  // Only draw things inside our tab while its visible
+  if (myTab1.getTabVisibility()) {
+        // Draw controls on myTab1 here
+    }
  }
  ```
  

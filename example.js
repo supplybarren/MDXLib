@@ -57,8 +57,8 @@ function main() {
 
 
         var colorpicker = MDX.colorpicker("color picker", sx, sy + 63, ar, ag, ab, aa, colorpickeropened);
-        if (colorpicker != undefined){
-            if (colorpicker == "closed"){
+        if (colorpicker != undefined) {
+            if (colorpicker == "closed") {
                 colorpickeropened = !colorpickeropened;
             } else {
                 ar = colorpicker.r;
