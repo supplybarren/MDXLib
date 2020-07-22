@@ -43,28 +43,12 @@ function main() {
 
         textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring);
 
-        if (MDX.button("Save config", sx, sy + 50)){
-            var config = '{ "slidervalue":' + slidervalue + ', "verticalslidervalue":' + verticalslidervalue + ', "checkboxvalue":' + checkboxvalue + 
-                         ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "r":' + ar + 
-                         ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}';
-            MDX.saveconfig(config);
-        }
-
-        if (MDX.button("Load config", sx, sy + 80)){
-            var cfg = JSON.parse(MDX.loadconfig());
-            slidervalue = cfg.slidervalue;
-            verticalslidervalue = cfg.verticalslidervalue;
-            checkboxvalue = cfg.checkboxvalue;
-            textboxstring = cfg.textboxstring;
-            chosenoption = cfg.chosenoption;
-            ar = cfg.r;
-            ag = cfg.g;
-            ab = cfg.b;
-            aa = cfg.a;
+        if (MDX.button("button", sx, sy + 50)) {
+            Local.SetClanTag(textboxstring);
         }
 
         var max = 1;
-        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue, max, true);
+        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 80, verticalslidervalue, max, true);
         var finalValue = verticalslidervalue * max;
     }
 
