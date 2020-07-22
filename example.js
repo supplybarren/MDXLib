@@ -1,4 +1,3 @@
-// this is YOUR script file, use this to get an idea of how to initialize and use MDXlib
 var MDX = require("mdxlib.js");
 
 var textboxstring = "false";
@@ -19,6 +18,7 @@ var verticalslidervalue = 20;
 var ar = 220;
 var ag = 10;
 var ab = 40;
+var aa = 255;
 
 function cleartabs(){
     tab1 = false;
@@ -64,7 +64,7 @@ function main(){
     if (tab2){
         slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue, 1);
 
-        var colorpicker = MDX.colorpicker("color picker", sx, sy + 63, ar, ag, ab, colorpickeropened);
+        var colorpicker = MDX.colorpicker("color picker", sx, sy + 63, ar, ag, ab, aa, colorpickeropened);
         if (colorpicker != undefined){
             if (colorpicker == "closed"){
                 colorpickeropened = !colorpickeropened;
@@ -72,6 +72,7 @@ function main(){
                 ar = colorpicker.r;
                 ag = colorpicker.g;
                 ab = colorpicker.b;
+                aa = colorpicker.a;
             }
         }
         

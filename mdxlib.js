@@ -159,13 +159,15 @@ function MDXcolorslider(text, gx, gy, val, color) {
     var relval = val;
     var font = Render.AddFont("Tahoma", 7, 700);
     if (curx > (gx - 1) && curx < (gx + 256) && cury > (gy + 12) && cury < (gy + 12 + 10)) {
-        texty = gy - 1;
+        texty = gy - 2;
         if (color == "red")
-            Render.Rect(gx - 2, gy + 10, 259, 14, [200, 0, 0, 255]);
+            Render.Rect(gx - 3, gy + 9, 261, 16, [200, 0, 0, 255]);
         if (color == "green")
-            Render.Rect(gx - 2, gy + 10, 259, 14, [0, 200, 0, 255]);
+            Render.Rect(gx - 3, gy + 9, 261, 16, [0, 200, 0, 255]);
         if (color == "blue")
-            Render.Rect(gx - 2, gy + 10, 259, 14, [80, 110, 200, 255]);
+            Render.Rect(gx - 3, gy + 9, 261, 16, [80, 110, 200, 255]);
+        if (color == "alpha")
+            Render.Rect(gx - 3, gy + 9, 261, 16, [200, 200, 200, 255]);
         if (Input.IsKeyPressed(0x01)) {
             val = curx - gx;
             relval = val;
@@ -173,13 +175,27 @@ function MDXcolorslider(text, gx, gy, val, color) {
     }
     if (val > 255)
         val = 255;
-    if (color == "red")
-        Render.GradientRect(gx, gy + 12, val, 10, 0, [200, 0, 0, 255], [150, 0, 0, 255]);
-    if (color == "green")
-        Render.GradientRect(gx, gy + 12, val, 10, 0, [0, 200, 0, 255], [0, 150, 0, 255]);
-    if (color == "blue")
-        Render.GradientRect(gx, gy + 12, val, 10, 0, [80, 110, 200, 255], [59, 81, 148, 255]);
-    Render.Rect(gx, gy + 12, 255, 10, [45, 45, 45, 255]);
+    if (color == "red") {
+        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [200, 0, 0, 255], [150, 0, 0, 255]);
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [200, 0, 0, 255]);
+        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
+    }
+    if (color == "green") {
+        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [0, 200, 0, 255], [0, 150, 0, 255]);
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [0, 200, 0, 255]);
+        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
+    }
+    if (color == "blue") {
+        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [80, 110, 200, 255], [59, 81, 148, 255]);
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [80, 110, 200, 255]);
+        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
+    }
+    if (color == "alpha") {
+        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [200, 200, 200, 255], [150, 150, 150, 255]);
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [200, 200, 200, 255]); 
+        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
+    }
+    Render.Rect(gx - 1, gy + 11, 257, 12, [45, 45, 45, 255]);
     Render.StringCustom(gx, texty, 0, text + " - " + relval, [255, 255, 255, 150], font);
     return val;
 }
@@ -216,6 +232,7 @@ function MDXdropdown(text, gx, gy, array, open, selectedoption) {
     var font = Render.AddFont("Tahoma", 7, 700);
     var totalarrayheight = 0;
     var ffsize = Render.TextSizeCustom("" + oop, font);
+    Render.GradientRect(gx, gy + 12, ffsize[0] + 10, 17, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
     Render.Rect(gx, gy + 12, ffsize[0] + 10, 17, [27, 27, 27, 255]);
     Render.StringCustom(gx + 5, gy + 16, 0, "" + oop, [255, 255, 255, 150], font);
     Render.StringCustom(gx, gy, 0, text, [255, 255, 255, 150], font);
@@ -294,7 +311,7 @@ function MDXtextbox(text, gx, gy, string) {
     return string;
 }
 
-function MDXcolorpicker(text, gx, gy, ar, ag, ab, open) {
+function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
     var cury = curPos[1];
@@ -302,6 +319,7 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, open) {
     var returnr = ar;
     var returng = ag;
     var returnb = ab;
+    var returna = aa;
     var texty = gy;
     if (curx > gx && curx < gx + 25 && cury > gy + 12 && cury < gy + 27) {
         Render.Rect(gx - 3, gy + 9, 31, 21, [r, g, b, 255]);
@@ -314,21 +332,23 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, open) {
     if (open) {
         Render.Rect(gx - 3, gy + 9, 31, 21, [r, g, b, 255]);
         texty = gy - 2;
-        Render.FilledRect(gx - 2, gy + 35, 270, 85, [9, 9, 9, 255]);
-        Render.Rect(gx - 2, gy + 35, 270, 85, [27, 27, 27, 255]);
+        Render.FilledRect(gx - 2, gy + 35, 270, 110, [9, 9, 9, 255]);
+        Render.Rect(gx - 2, gy + 35, 270, 110, [27, 27, 27, 255]);
         returnr = MDXcolorslider("red", gx + 5, gy + 40, returnr, "red");
         returng = MDXcolorslider("green", gx + 5, gy + 65, returng, "green");
         returnb = MDXcolorslider("blue", gx + 5, gy + 90, returnb, "blue");
+        returna = MDXcolorslider("alpha", gx + 5, gy + 115, returna, "alpha");
     }
     Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
     Render.Rect(gx, gy + 12, 25, 15, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 27, 17, [27, 27, 27, 255]);
-    Render.GradientRect(gx + 2, gy + 14, 21, 11, 0, [ar, ag, ab, 255], [ag - 20, ag - 30, ab - 50, 255]);
+    Render.GradientRect(gx + 2, gy + 14, 21, 11, 0, [ar, ag, ab, aa], [ag - 20, ag - 30, ab - 50, aa]);
 
     return {
         r: returnr,
         g: returng,
-        b: returnb
+        b: returnb,
+        a: returna
     };
 }
 
