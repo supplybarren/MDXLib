@@ -26,7 +26,6 @@
   
   //now we can start building our controls
   //if we want a checkbox on our menu we can easily add it
-  //now back to the checkbox
   MDX.checkbox("checkbox", MDX.agx + 50, MDX.agy + 50, checkboxvalue);
   //the string in quotes is our checkbox text, MDX.agx is our X value, MDX.agy is our Y value, and checkboxvalue is the changing value.
  }
