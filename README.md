@@ -6,7 +6,7 @@
  
  Start by including the module
  ```javascript
- var MDX = require("MDXlib.js");
+ var MDX = require("mdxlib.js");
  ```
  
  Now in your main drawing function we can begin creating our GUI
