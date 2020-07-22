@@ -113,8 +113,10 @@ function MDXslider(text, gx, gy, val, max) {
         }
     }
     Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
-    Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
-    Render.Rect(gx + 1, gy + 13, val - 2, 8, [r, g, b, 255]);
+    if (val != 0){
+        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [r, g, b, 255]);
+    }
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " - " + relval, [255, 255, 255, 150], font);
@@ -142,8 +144,10 @@ function MDXverticalslider(text, gx, gy, val, max, centered) {
             relval = val * max;
         }
     }
-    Render.GradientRect(gx + 2, gy + 15 + 90 - val - 4, 6, val, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
-    Render.Rect(gx + 1, gy + 13 + 90 - val - 2, 8, val, [r, g, b, 255]);
+    if (val != 0){
+        Render.GradientRect(gx + 2, gy + 15 + 90 - val - 4, 6, val, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.Rect(gx + 1, gy + 13 + 90 - val - 2, 8, val, [r, g, b, 255]);
+    }
     Render.Rect(gx, gy + 12, 10, 90, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 12, 92, [27, 27, 27, 255]);
     Render.StringCustom(textx, texty, 0, text, [255, 255, 255, 150], font);
