@@ -8,6 +8,20 @@ var biggestwidth = 0;
 var globaltime = Globals.Realtime();
 //#endregion
 
+//#region Javascript function definitions
+if (!Object.entries) {
+    Object.entries = function (obj) {
+        var ownProps = Object.keys(obj),
+            i = ownProps.length,
+            resArray = new Array(i); // preallocate the Array
+        while (i--)
+            resArray[i] = obj[ownProps[i]];
+
+        return resArray;
+    };
+}
+//#endregion
+
 function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, bg_col_top, bg_col_bottom) {
     if (typeof (bg_col_top) === 'undefined' || typeof (bg_col_bottom) === 'undefined') {
         Render.FilledRect(gx, gy, gwidth, gheight, [9, 9, 9, 255]);
@@ -25,34 +39,92 @@ function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, bg_col_top, bg
     Render.StringCustom(gx + 7 + titlesizex + 1, gy + 5, 0, white_title, [255, 255, 255, 155], font);
 }
 
-function MDXtab(text, gx, gy) {
+//#region MDXTab
+function MDXTab(tabName, visible, x, y) {
+    this.tabName = tabName;
+    this.visible = visible;
+    this.x = x;
+    this.y = y;
+
+    MDXTab.instances[tabName] = this;
+}
+
+MDXTab.instances = {};
+
+MDXTab.prototype.getTabName = function () {
+    return this.tabName;
+}
+
+MDXTab.prototype.setTabName = function (tabName) {
+    this.tabName = tabName;
+}
+
+MDXTab.prototype.getTabVisibility = function () {
+    return this.visible;
+}
+
+MDXTab.prototype.setTabVisibility = function (visible) {
+    this.visible = visible;
+}
+
+MDXTab.prototype.getTabX = function () {
+    return this.x;
+}
+
+MDXTab.prototype.setTabX = function (x) {
+    this.x = x;
+}
+
+MDXTab.prototype.getTabY = function () {
+    return this.y;
+}
+
+MDXTab.prototype.setTabY = function (y) {
+    this.y = y;
+}
+
+function MDXtab(mdxTab) {
+    if (typeof (mdxTab.tabName) === 'undefined') return false;
+    if (typeof (mdxTab.visible) === 'undefined') return false;
+    if (typeof (mdxTab.x) === 'undefined') return false;
+    if (typeof (mdxTab.y) === 'undefined') return false;
+
     var a = 100;
-    var hoveredWIDTH = 1;
-    var stringx = gx + 5;
+    var hoveredWidth = 1;
+    var stringX = mdxTab.x + 5;
     var mouse = Input.GetCursorPosition();
-    var mousex = mouse[0];
-    var mousey = mouse[1];
-    var desc = false;
-    if (mousex > gx && mousex < (gx + 120) && mousey > gy && mousey < (gy + 15)) {
+    var mouseX = mouse[0];
+    var mouseY = mouse[1];
+    var font = Render.AddFont("Tahoma", 7, 700);
+
+    if (mouseX > mdxTab.x && mouseX < (mdxTab.x + 120) && mouseY > mdxTab.y && mouseY < (mdxTab.y + 15)) {
         a = 150;
-        hoveredWIDTH = 2;
-        stringx += 1;
+        hoveredWidth = 2;
+        stringX += 1;
 
         if (Input.IsKeyPressed(0x01)) {
             a = 200;
-            hoveredWIDTH = 3;
-            stringx += 1;
-            desc = true;
+            hoveredWidth = 3;
+            stringX += 1;
+            Object.entries(MDXTab.instances).forEach(function (instance) {
+                if (instance.getTabName() != mdxTab.getTabName()) {
+                    instance.setTabVisibility(false);
+                } else {
+                    instance.setTabVisibility(true);
+                }
+            });
         }
     }
-    Render.GradientRect(gx, gy, 150, 15, 1, [255, 255, 255, 30], [27, 27, 27, 0]);
-    Render.FilledRect(gx, gy, hoveredWIDTH, 15, [r, g, b, 255]);
-    var font = Render.AddFont("Tahoma", 7, 700);
-    Render.StringCustom(stringx, gy + 3, 0, text, [0, 0, 0, 255], font);
-    Render.StringCustom(stringx, gy + 4, 0, text, [0, 0, 0, 255], font);
-    Render.StringCustom(stringx, gy + 2, 0, text, [255, 255, 255, a], font);
-    return desc;
+
+    Render.GradientRect(mdxTab.x, mdxTab.y, 150, 15, 1, [255, 255, 255, 30], [27, 27, 27, 0]);
+    Render.FilledRect(mdxTab.x, mdxTab.y, hoveredWidth, 15, [r, g, b, 255]);
+    Render.StringCustom(stringX, mdxTab.y + 3, 0, mdxTab.tabName, [0, 0, 0, 255], font);
+    Render.StringCustom(stringX, mdxTab.y + 4, 0, mdxTab.tabName, [0, 0, 0, 255], font);
+    Render.StringCustom(stringX, mdxTab.y + 2, 0, mdxTab.tabName, [255, 255, 255, a], font);
+    return mdxTab.getTabVisibility();
 }
+
+//#endregion
 
 function MDXdrag(gx, gy) {
     var curPos = Input.GetCursorPosition();
@@ -339,7 +411,10 @@ exports.agy = agy;
 
 //#region Exported functions
 exports.menu = MDXmenu;
+
 exports.tab = MDXtab;
+exports.MDXTab = MDXTab;
+
 exports.drag = MDXdrag;
 exports.checkbox = MDXcheckbox;
 exports.slider = MDXslider;
