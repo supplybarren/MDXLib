@@ -32,9 +32,9 @@
   
   // Declare the tab. Syntax: var variableName = new MDX.MDXTab("tabName", boolVisibility, coordX, coordY);
   // Important: you should declare your tab INSIDE a Draw callback!
-  // You can't have more than 1 tabs with the same name!
+  // You can't have more than 1 tabs with the same name! Also, don't set more than 1 tab's visibility to true by default.
   var myTab1 = new MDX.MDXTab("tab1", true, MDX.agx + 10, MDX.agy + 30);
-  var myTab2 = new MDX.MDXTab("tab2", true, MDX.agx + 10, MDX.agy + 50);
+  var myTab2 = new MDX.MDXTab("tab2", false, MDX.agx + 10, MDX.agy + 50);
 
   // To draw your tab, just call MDX.tab with the previously declared MDXTab object as argument.
   MDX.tab(myTab1);
