@@ -346,7 +346,11 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
     Render.Rect(gx, gy + 12, 25, 15, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 27, 17, [27, 27, 27, 255]);
-    Render.GradientRect(gx + 2, gy + 14, 21, 11, 0, [ar, ag, ab, aa], [ag - 20, ag - 30, ab - 50, aa]);
+    Render.FilledRect(gx + 2, gy + 14, 10, 5, [214, 214, 214, 255]);
+    Render.FilledRect(gx + 12, gy + 14, 11, 5, [255, 255, 255, 255]);
+    Render.FilledRect(gx + 2, gy + 19, 10, 6, [255, 255, 255, 255]);
+    Render.FilledRect(gx + 12, gy + 19, 11, 6, [214, 214, 214, 255]);
+    Render.FilledRect(gx + 2, gy + 14, 21, 11, [ar, ag, ab, aa]);
 
     return {
         r: returnr,
