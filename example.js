@@ -93,8 +93,6 @@ function main() {
             }
         }
     }
-
-    Cheat.Print("test");
 }
 
 Cheat.RegisterCallback("Draw", "main");
