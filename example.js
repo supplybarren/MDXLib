@@ -20,15 +20,10 @@ var ag = 10;
 var ab = 40;
 var aa = 255;
 
-function cleartabs(){
-    tab1 = false;
-    tab2 = false;
-}
-
-function main(){
-    var tabgy = MDX.agy + 30;
+function main() {
+    var tabBaseY = MDX.agy + 30;
     var sx = MDX.agx + 143;
-    var sy = tabgy;
+    var sy = tabBaseY;
 
     MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200){
@@ -36,15 +31,11 @@ function main(){
         MDX.agy = MDX.drag(MDX.agx, MDX.agy).y - 10;
     }
 
-    if (MDX.tab("tab 1", MDX.agx + 10, tabgy)){
-        cleartabs();
-        tab1 = true;
-    }
+    var myTab1 = new MDX.MDXTab("tab1", true, MDX.agx + 10, tabBaseY);
+    var myTab2 = new MDX.MDXTab("tab2", false, MDX.agx + 10, tabBaseY + 20);
 
-    if (MDX.tab("tab 2", MDX.agx + 10, tabgy + 20)){
-        cleartabs();
-        tab2 = true;
-    }
+    MDX.tab(myTab1);
+    MDX.tab(myTab2);
 
     if (tab1){
         if (MDX.checkbox("checkbox", sx, sy, checkboxvalue))
