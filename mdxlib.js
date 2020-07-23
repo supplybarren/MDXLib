@@ -117,12 +117,15 @@ var Base64 = {
     }
 }
 
-function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, bg_col_top, bg_col_bottom) {
+function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, passed_r, passed_g, passed_b, bg_col_top, bg_col_bottom) {
     if (typeof (bg_col_top) === 'undefined' || typeof (bg_col_bottom) === 'undefined') {
         Render.FilledRect(gx, gy, gwidth, gheight, [9, 9, 9, 255]);
     } else {
         Render.GradientRect(gx, gy, gwidth, gheight, 0, [bg_col_top[0], bg_col_top[1], bg_col_top[2], 255], [bg_col_bottom[0], bg_col_bottom[1], bg_col_bottom[2], 255]);
     }
+    r = passed_r;
+    g = passed_g;
+    b = passed_b;
     Render.Rect(gx, gy, gwidth, gheight, [0, 0, 0, 255]);
     Render.Rect(gx + 1, gy + 1, gwidth - 2, gheight - 2, [27, 27, 27, 255]);
     Render.Rect(gx + 1, gy + 1, gwidth - 2, 20, [27, 27, 27, 255]);

@@ -11,6 +11,7 @@ var arrayopened = false;
 var chosenoption = 0;
 
 var colorpickeropened = false;
+var colorpicker2opened = false;
 
 var slidervalue = 25;
 var verticalslidervalue = 20;
@@ -20,12 +21,17 @@ var ag = 10;
 var ab = 40;
 var aa = 255;
 
+var br = 100;
+var bg = 1;
+var bb = 99;
+var ba = 255;
+
 function main() {
     var tabBaseY = MDX.agy + 30;
     var sx = MDX.agx + 143;
     var sy = tabBaseY;
 
-    MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300);
+    MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300, ar, ag, ab);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200) {
         MDX.agx = MDX.drag(MDX.agx, MDX.agy).x - 150;
         MDX.agy = MDX.drag(MDX.agx, MDX.agy).y - 10;
