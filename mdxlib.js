@@ -7,6 +7,10 @@ var agy = 200;
 var biggestwidth = 0;
 var globaltime = Globals.Realtime();
 var savedcolor = undefined;
+var keyCodes = [0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x20];
+var keyChar = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "];
+var extraKeyCodes = [0x01, 0x02, 0x04, 0x05, 0x06, 0x09, 0x0D, 0x10, 0xA1, 0x11, 0x12, 0x14, 0x1B, 0x20, 0x24, 0x25, 0x26, 0x27, 0x28, 0x2D, 0x2E];
+var extraKeyChar = ["m1", "m2", "m3", "x1", "x2", "tab", "ent", "shf", "ctl", "alt", "cap", "esc", "spc", "hom", "lft", "up", "rgt", "dwn", "ins", "del"];
 //#endregion
 
 //#region Javascript function definitions
@@ -498,8 +502,6 @@ function MDXtextbox(text, gx, gy, string) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
     var cury = curPos[1];
-    var keyCodes = [0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x20];
-    var keyChar = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " "];
     var font = Render.AddFont("Tahoma", 7, 700);
     var texty = gy;
     Render.GradientRect(gx, gy + 12, 90, 17, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
@@ -595,6 +597,53 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     };
 }
 
+function MDXhotkey(text, gx, gy, keyNum) {
+    var curPos = Input.GetCursorPosition();
+    var curx = curPos[0];
+    var cury = curPos[1];
+    var font = Render.AddFont("Tahoma", 7, 700);
+    var key = "---";
+    for (i = 0; i < keyCodes.length; i++) {
+        if (keyNum == keyCodes[i]) {
+            key = keyChar[i].toUpperCase();
+        }
+    }
+
+    for (i = 0; i < extraKeyCodes.length; i++) {
+        if (keyNum == extraKeyCodes[i]) {
+            key = extraKeyChar[i].toUpperCase();
+        }
+    }
+    var texty = gy;
+    if (curx > gx && curx < gx + 26 && cury > gy + 12 && cury < gy + 29) {
+        texty = gy - 2;
+        Render.Rect(gx - 3, gy + 9, 31, 23, [r, g, b, 255]);
+        for (i = 0; i < keyCodes.length; i++) {
+            if (Input.IsKeyPressed(keyCodes[i]) && Globals.Realtime() > globaltime + 0.2) {
+                globaltime = Globals.Realtime();
+                key = keyChar[i].toUpperCase();
+                keyNum = keyCodes[i];
+            }
+        }
+
+        for (i = 0; i < extraKeyCodes.length; i++) {
+            if (Input.IsKeyPressed(extraKeyCodes[i]) && Globals.Realtime() > globaltime + 0.2) {
+                globaltime = Global.Realtime();
+                key = extraKeyChar[i].toUpperCase();
+                keyNum = extraKeyCodes[i];
+            }
+        }
+    }
+    var keySize = Render.TextSizeCustom(key, font);
+    var keySizex = keySize[0] / 2;
+    Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
+    Render.GradientRect(gx, gy + 12, 25, 17, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
+    Render.StringCustom(gx + 13 - keySizex, gy + 15, 0, key, [255, 255, 255, 150], font);
+    Render.Rect(gx, gy + 12, 25, 17, [0, 0, 0, 255]);
+    Render.Rect(gx - 1, gy + 11, 27, 19, [27, 27, 27, 255]);
+    return keyNum;
+}
+
 function MDXsaveconfig(json) {
     var config = Base64.encode(json);
     Cheat.ExecuteCommand("xbox_throttlespoof " + config);
@@ -626,5 +675,6 @@ exports.textbox = MDXtextbox;
 exports.colorpicker = MDXcolorpicker;
 exports.saveconfig = MDXsaveconfig;
 exports.loadconfig = MDXloadconfig;
+exports.hotkey = MDXhotkey;
 exports.base = Base64;
 //#endregion
