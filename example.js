@@ -27,6 +27,8 @@ var bg = 1;
 var bb = 99;
 var ba = 255;
 
+var hotkey = 0x01;
+
 function main() {
     var tabBaseY = MDX.agy + 30;
     var sx = MDX.agx + 143;
@@ -51,7 +53,7 @@ function main() {
         textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring);
 
         if (MDX.button("Save config", sx, sy + 50)) {
-            var config = '{ "slidervalue":' + slidervalue[0] + ', "verticalslidervalue":' + verticalslidervalue[0] + ', "checkboxvalue":' + checkboxvalue +
+            var config = '{ "slidervalue":' + slidervalue[1] + ', "verticalslidervalue":' + verticalslidervalue[1] + ', "checkboxvalue":' + checkboxvalue +
                 ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "colors":[{"r":' + ar +
                 ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}]}';
             MDX.saveconfig(config);
@@ -59,8 +61,8 @@ function main() {
 
         if (MDX.button("Load config", sx, sy + 80)) {
             var cfg = JSON.parse(MDX.loadconfig());
-            slidervalue = cfg.slidervalue;
-            verticalslidervalue = cfg.verticalslidervalue;
+            slidervalue[1] = cfg.slidervalue;
+            verticalslidervalue[1] = cfg.verticalslidervalue;
             checkboxvalue = cfg.checkboxvalue;
             textboxstring = cfg.textboxstring;
             chosenoption = cfg.chosenoption;
@@ -71,6 +73,10 @@ function main() {
         }
         verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
         Cheat.Print(verticalslidervalue[0] + "\n");
+
+        hotkey = MDX.hotkey("hotkey", sx + 150, sy, hotkey);
+        if (Input.IsKeyPressed(hotkey))
+            Cheat.Print("hotkey activated!" + "\n");
     }
 
     if (myTab2.getTabVisibility()) {
