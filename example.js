@@ -16,9 +16,9 @@ var colorpicker2opened = false;
 var slidervalue = 25;
 var verticalslidervalue = 20;
 
-var ar = 220;
-var ag = 10;
-var ab = 40;
+var ar = 80;
+var ag = 110;
+var ab = 200;
 var aa = 255;
 
 var br = 100;
@@ -51,8 +51,8 @@ function main() {
 
         if (MDX.button("Save config", sx, sy + 50)) {
             var config = '{ "slidervalue":' + slidervalue + ', "verticalslidervalue":' + verticalslidervalue + ', "checkboxvalue":' + checkboxvalue +
-                ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "r":' + ar +
-                ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}';
+                ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "colors":[{"r":' + ar +
+                ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}]}';
             MDX.saveconfig(config);
         }
 
@@ -63,10 +63,10 @@ function main() {
             checkboxvalue = cfg.checkboxvalue;
             textboxstring = cfg.textboxstring;
             chosenoption = cfg.chosenoption;
-            ar = cfg.r;
-            ag = cfg.g;
-            ab = cfg.b;
-            aa = cfg.a;
+            ar = cfg.colors[0].r;
+            ag = cfg.colors[0].g;
+            ab = cfg.colors[0].b;
+            aa = cfg.colors[0].a;
         }
 
         var max = 1;
