@@ -218,7 +218,7 @@ function MDXtab(mdxTab) {
             hoveredWidth = 3;
             stringX += 1;
 
-            Object.entries(MDXTab.instances).forEach(function (instance, key) {
+            Object.entries(MDXTab.instances).forEach(function (instance) {
                 if (instance.getTabName() != mdxTab.getTabName()) {
                     instance.setTabVisibility(false);
                 } else {
