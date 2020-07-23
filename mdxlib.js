@@ -286,14 +286,14 @@ function MDXslider(text, gx, gy, val, max) {
     var curx = curPos[0];
     var cury = curPos[1];
     var texty = gy;
-    var relval = val * max;
+    var relval = Math.round(val * (max / 90));
     var font = Render.AddFont("Tahoma", 7, 700);
     if (curx > (gx - 1) && curx < (gx + 91) && cury > (gy + 12) && cury < (gy + 12 + 10)) {
         texty = gy - 2;
         Render.Rect(gx - 3, gy + 9, 96, 16, [r, g, b, 255]);
         if (Input.IsKeyPressed(0x01)) {
             val = curx - gx;
-            relval = val * max;
+            relval = Math.round(val * (max / 90));
         }
     }
     Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
@@ -313,7 +313,7 @@ function MDXverticalslider(text, gx, gy, val, max, centered) {
     var cury = curPos[1];
     var textx = gx;
     var texty = gy - 1;
-    var relval = val * max;
+    var relval = Math.round(val * (max / 90));
     var font = Render.AddFont("Tahoma", 7, 700);
     var textsize = Render.TextSizeCustom(text, font);
     if (centered) {
@@ -325,7 +325,7 @@ function MDXverticalslider(text, gx, gy, val, max, centered) {
         Render.Rect(gx - 3, gy + 9, 16, 96, [r, g, b, 255]);
         if (Input.IsKeyPressed(0x01)) {
             val = 90 - (cury - gy - 12);
-            relval = val * max;
+            relval = Math.round(val * (max / 90));
         }
     }
     if (val != 0) {
