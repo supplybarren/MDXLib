@@ -17,7 +17,11 @@
  function main() {
   // Initialize our menu
   // MDX.agx and MDX.agy are default static values in the lib file, 500 & 300 are width & height. It is recommended you use the default MDX values for the drag control to work.
-  MDX.menu("MDX", "GUI", MGX.agx, MDX.agy, 500, 300);
+  // r, g, and b are your primary menu colors. Most things with color will pull their color from this stack
+  var r = 80;
+  var g = 110;
+  var b = 200;
+  MDX.menu("MDX", "GUI", MGX.agx, MDX.agy, 500, 300, r, g, b);
   
   // Setup the drag function using the following code.
   if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200){
