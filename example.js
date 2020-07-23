@@ -13,9 +13,9 @@ var chosenoption = 0;
 var colorpickeropened = false;
 var colorpicker2opened = false;
 
-var slidervalue = 25;
-var verticalslidervalue = 20;
-var sliderfloat = 0.5;
+var slidervalue = [25, 25];
+var verticalslidervalue = [10, 10];
+var sliderfloat = [0.5, 0.5];
 
 var ar = 80;
 var ag = 110;
@@ -69,13 +69,15 @@ function main() {
             ab = cfg.colors[0].b;
             aa = cfg.colors[0].a;
         }
-
-        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue, -100, 100, true);
+        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
+        Cheat.Print(verticalslidervalue[0] + "\n");
     }
 
     if (myTab2.getTabVisibility()) {
-        slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue, -90, 5);
-        sliderfloat = MDX.sliderfloat("float", sx, sy + 63, sliderfloat, 0, 1);
+        slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue[1], -90, 5);
+        Cheat.Print(slidervalue[0] + "\n");
+        sliderfloat = MDX.sliderfloat("float", sx, sy + 63, sliderfloat[1], 0, 1);
+        Cheat.Print(sliderfloat[0] + "\n");
 
         var colorpicker = MDX.colorpicker("color picker", sx, sy + 93, ar, ag, ab, aa, colorpickeropened);
         if (colorpicker != undefined) {
