@@ -51,7 +51,7 @@ function main() {
         textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring);
 
         if (MDX.button("Save config", sx, sy + 50)) {
-            var config = '{ "slidervalue":' + slidervalue + ', "verticalslidervalue":' + verticalslidervalue + ', "checkboxvalue":' + checkboxvalue +
+            var config = '{ "slidervalue":' + slidervalue[0] + ', "verticalslidervalue":' + verticalslidervalue[0] + ', "checkboxvalue":' + checkboxvalue +
                 ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "colors":[{"r":' + ar +
                 ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}]}';
             MDX.saveconfig(config);
