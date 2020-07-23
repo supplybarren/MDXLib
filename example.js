@@ -15,6 +15,7 @@ var colorpicker2opened = false;
 
 var slidervalue = 25;
 var verticalslidervalue = 20;
+var sliderfloat = 0.5;
 
 var ar = 80;
 var ag = 110;
@@ -69,13 +70,14 @@ function main() {
             aa = cfg.colors[0].a;
         }
 
-        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue, 0, 900, true);
+        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue, -100, 100, true);
     }
 
     if (myTab2.getTabVisibility()) {
         slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue, -90, 5);
+        sliderfloat = MDX.sliderfloat("float", sx, sy + 63, sliderfloat, 0, 1);
 
-        var colorpicker = MDX.colorpicker("color picker", sx, sy + 63, ar, ag, ab, aa, colorpickeropened);
+        var colorpicker = MDX.colorpicker("color picker", sx, sy + 93, ar, ag, ab, aa, colorpickeropened);
         if (colorpicker != undefined) {
             if (colorpicker == "closed") {
                 colorpickeropened = !colorpickeropened;

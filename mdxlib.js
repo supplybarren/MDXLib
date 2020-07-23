@@ -339,6 +339,32 @@ function MDXverticalslider(text, gx, gy, val, min, max, centered) {
     return val;
 }
 
+function MDXsliderfloat(text, gx, gy, val, min, max) {
+    var curPos = Input.GetCursorPosition();
+    var curx = curPos[0];
+    var cury = curPos[1];
+    var texty = gy;
+    var relval = (val * ((max - min) / 90) + min).toFixed(2);
+    var font = Render.AddFont("Tahoma", 7, 700);
+    if (curx > (gx - 1) && curx < (gx + 91) && cury > (gy + 12) && cury < (gy + 12 + 10)) {
+        texty = gy - 2;
+        Render.Rect(gx - 3, gy + 9, 96, 16, [r, g, b, 255]);
+        if (Input.IsKeyPressed(0x01)) {
+            val = curx - gx;
+            relval = (val * ((max - min) / 90) + min).toFixed(2);
+        }
+    }
+    Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
+    if (val != 0) {
+        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.Rect(gx + 1, gy + 13, val - 2, 8, [r, g, b, 255]);
+    }
+    Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
+    Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
+    Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
+    return val;
+}
+
 function MDXcolorslider(text, gx, gy, val, color) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
@@ -580,6 +606,7 @@ exports.drag = MDXdrag;
 exports.checkbox = MDXcheckbox;
 exports.slider = MDXslider;
 exports.verticalslider = MDXverticalslider;
+exports.sliderfloat = MDXsliderfloat;
 exports.colorslider = MDXcolorslider;
 exports.button = MDXbutton;
 exports.dropdown = MDXdropdown;
