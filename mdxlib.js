@@ -304,7 +304,11 @@ function MDXslider(text, gx, gy, val, min, max) {
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
-    return val;
+
+    var valueArray = new Array(2);
+    valueArray[0] = relval;
+    valueArray[1] = val;
+    return valueArray;
 }
 
 function MDXverticalslider(text, gx, gy, val, min, max, centered) {
@@ -336,7 +340,11 @@ function MDXverticalslider(text, gx, gy, val, min, max, centered) {
     Render.Rect(gx - 1, gy + 11, 12, 92, [27, 27, 27, 255]);
     Render.StringCustom(textx, texty, 0, text, [255, 255, 255, 150], font);
     Render.StringCustom(gx + 15, gy + 90 - val + 5, 0, "" + relval, [255, 255, 255, 150], font);
-    return val;
+
+    var valueArray = new Array(2);
+    valueArray[0] = relval;
+    valueArray[1] = val;
+    return valueArray;
 }
 
 function MDXsliderfloat(text, gx, gy, val, min, max) {
@@ -362,7 +370,11 @@ function MDXsliderfloat(text, gx, gy, val, min, max) {
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
-    return val;
+
+    var valueArray = new Array(2);
+    valueArray[0] = relval;
+    valueArray[1] = val;
+    return valueArray;
 }
 
 function MDXcolorslider(text, gx, gy, val, color) {

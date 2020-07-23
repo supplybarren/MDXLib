@@ -304,7 +304,11 @@ function MDXslider(text, gx, gy, val, min, max) {
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
-    return val;
+
+    var valueArray = new Array(2);
+    valueArray[0] = relval;
+    valueArray[1] = val;
+    return valueArray;
 }
 
 function MDXverticalslider(text, gx, gy, val, min, max, centered) {
@@ -336,7 +340,11 @@ function MDXverticalslider(text, gx, gy, val, min, max, centered) {
     Render.Rect(gx - 1, gy + 11, 12, 92, [27, 27, 27, 255]);
     Render.StringCustom(textx, texty, 0, text, [255, 255, 255, 150], font);
     Render.StringCustom(gx + 15, gy + 90 - val + 5, 0, "" + relval, [255, 255, 255, 150], font);
-    return val;
+
+    var valueArray = new Array(2);
+    valueArray[0] = relval;
+    valueArray[1] = val;
+    return valueArray;
 }
 
 function MDXsliderfloat(text, gx, gy, val, min, max) {
@@ -362,7 +370,11 @@ function MDXsliderfloat(text, gx, gy, val, min, max) {
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
-    return val;
+
+    var valueArray = new Array(2);
+    valueArray[0] = relval;
+    valueArray[1] = val;
+    return valueArray;
 }
 
 function MDXcolorslider(text, gx, gy, val, color) {
@@ -606,9 +618,9 @@ var chosenoption = 0;
 var colorpickeropened = false;
 var colorpicker2opened = false;
 
-var slidervalue = 25;
-var verticalslidervalue = 20;
-var sliderfloat = 0.5;
+var slidervalue = [25, 25];
+var verticalslidervalue = [10, 10];
+var sliderfloat = [0.5, 0.5];
 
 var ar = 80;
 var ag = 110;
@@ -663,12 +675,15 @@ function main() {
             aa = cfg.colors[0].a;
         }
 
-        verticalslidervalue = MDXverticalslider("centered", sx, sy + 110, verticalslidervalue, -100, 100, true);
+        verticalslidervalue = MDXverticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
+        Cheat.Print(verticalslidervalue[0] + "\n");
     }
 
     if (myTab2.getTabVisibility()) {
-        slidervalue = MDXslider("slider", sx, sy + 33, slidervalue, -90, 5);
-        sliderfloat = MDXsliderfloat("float", sx, sy + 63, sliderfloat, 0, 1);
+        slidervalue = MDXslider("slider", sx, sy + 33, slidervalue[1], -90, 5);
+        Cheat.Print(slidervalue[0] + "\n");
+        sliderfloat = MDXsliderfloat("float", sx, sy + 63, sliderfloat[1], 0, 1);
+        Cheat.Print(sliderfloat[0] + "\n");
 
         var colorpicker = MDXcolorpicker("color picker", sx, sy + 93, ar, ag, ab, aa, colorpickeropened);
         if (colorpicker != undefined) {
