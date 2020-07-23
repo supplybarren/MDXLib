@@ -304,7 +304,7 @@ function MDXslider(text, gx, gy, val, min, max) {
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
-
+  
     var valueArray = new Array(2);
     valueArray[0] = relval;
     valueArray[1] = val;
@@ -340,7 +340,7 @@ function MDXverticalslider(text, gx, gy, val, min, max, centered) {
     Render.Rect(gx - 1, gy + 11, 12, 92, [27, 27, 27, 255]);
     Render.StringCustom(textx, texty, 0, text, [255, 255, 255, 150], font);
     Render.StringCustom(gx + 15, gy + 90 - val + 5, 0, "" + relval, [255, 255, 255, 150], font);
-
+  
     var valueArray = new Array(2);
     valueArray[0] = relval;
     valueArray[1] = val;
@@ -674,7 +674,6 @@ function main() {
             ab = cfg.colors[0].b;
             aa = cfg.colors[0].a;
         }
-
         verticalslidervalue = MDXverticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
         Cheat.Print(verticalslidervalue[0] + "\n");
     }
