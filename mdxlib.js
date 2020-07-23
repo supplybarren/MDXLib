@@ -281,19 +281,19 @@ function MDXcheckbox(text, gx, gy, enabled) {
     Render.Rect(gx - 1, gy - 1, 12, 12, [27, 27, 27, 255]);
 }
 
-function MDXslider(text, gx, gy, val, max) {
+function MDXslider(text, gx, gy, val, min, max) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
     var cury = curPos[1];
     var texty = gy;
-    var relval = Math.round(val * (max / 90));
+    var relval = Math.round(val * ((max - min) / 90) + min);
     var font = Render.AddFont("Tahoma", 7, 700);
     if (curx > (gx - 1) && curx < (gx + 91) && cury > (gy + 12) && cury < (gy + 12 + 10)) {
         texty = gy - 2;
         Render.Rect(gx - 3, gy + 9, 96, 16, [r, g, b, 255]);
         if (Input.IsKeyPressed(0x01)) {
             val = curx - gx;
-            relval = Math.round(val * (max / 90));
+            relval = Math.round(val * ((max - min) / 90) + min);
         }
     }
     Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
@@ -303,17 +303,17 @@ function MDXslider(text, gx, gy, val, max) {
     }
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
-    Render.StringCustom(gx, texty, 0, text + " - " + relval, [255, 255, 255, 150], font);
+    Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
     return val;
 }
 
-function MDXverticalslider(text, gx, gy, val, max, centered) {
+function MDXverticalslider(text, gx, gy, val, min, max, centered) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
     var cury = curPos[1];
     var textx = gx;
     var texty = gy - 1;
-    var relval = Math.round(val * (max / 90));
+    var relval = Math.round(val * ((max - min) / 90) + min);
     var font = Render.AddFont("Tahoma", 7, 700);
     var textsize = Render.TextSizeCustom(text, font);
     if (centered) {
@@ -325,7 +325,7 @@ function MDXverticalslider(text, gx, gy, val, max, centered) {
         Render.Rect(gx - 3, gy + 9, 16, 96, [r, g, b, 255]);
         if (Input.IsKeyPressed(0x01)) {
             val = 90 - (cury - gy - 12);
-            relval = Math.round(val * (max / 90));
+            relval = Math.round(val * ((max - min) / 90) + min);
         }
     }
     if (val != 0) {

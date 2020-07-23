@@ -69,11 +69,11 @@ function main() {
             aa = cfg.colors[0].a;
         }
 
-        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue, 3582, true);
+        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue, 0, 900, true);
     }
 
     if (myTab2.getTabVisibility()) {
-        slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue, 5);
+        slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue, -90, 5);
 
         var colorpicker = MDX.colorpicker("color picker", sx, sy + 63, ar, ag, ab, aa, colorpickeropened);
         if (colorpicker != undefined) {
