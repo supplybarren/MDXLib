@@ -6,6 +6,7 @@ var agx = 200;
 var agy = 200;
 var biggestwidth = 0;
 var globaltime = Globals.Realtime();
+var savedcolor = undefined;
 //#endregion
 
 //#region Javascript function definitions
@@ -525,15 +526,16 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
         returnb = MDXcolorslider("blue", gx + 5, gy + 90, returnb, "blue");
         returna = MDXcolorslider("alpha", gx + 5, gy + 115, returna, "alpha");
         if (MDXbutton("Copy", gx + 5, gy + 145)) {
-            var color = Base64.encode('{"r":' + returnr + ', "g":' + returng + ', "b":' + returnb + ', "a":' + returna + '}');
-            Cheat.ExecuteCommand("xbox_throttlebias " + color);
+            savedcolor = Base64.encode('{"r":' + returnr + ', "g":' + returng + ', "b":' + returnb + ', "a":' + returna + '}');
         }
         if (MDXbutton("Paste", gx + 60, gy + 145)) {
-            var savedcolor = JSON.parse(Base64.decode(Convar.GetString("xbox_throttlebias")));
-            returnr = savedcolor.r;
-            returng = savedcolor.g;
-            returnb = savedcolor.b;
-            returna = savedcolor.a;
+            if (savedcolor !== undefined) {
+                var sav_col = JSON.parse(Base64.decode(savedcolor));
+                returnr = sav_col.r;
+                returng = sav_col.g;
+                returnb = sav_col.b;
+                returna = sav_col.a;
+            }
         }
     }
     Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
