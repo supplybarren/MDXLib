@@ -529,7 +529,7 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
             savedcolor = Base64.encode('{"r":' + returnr + ', "g":' + returng + ', "b":' + returnb + ', "a":' + returna + '}');
         }
         if (MDXbutton("Paste", gx + 60, gy + 145)) {
-            if (savedcolor !== 'undefined') {
+            if (savedcolor !== undefined) {
                 var sav_col = JSON.parse(Base64.decode(savedcolor));
                 returnr = sav_col.r;
                 returng = sav_col.g;
