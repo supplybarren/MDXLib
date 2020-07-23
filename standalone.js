@@ -218,7 +218,7 @@ function MDXtab(mdxTab) {
             hoveredWidth = 3;
             stringX += 1;
 
-            Object.entries(MDXTab.instances).forEach(function (instance) {
+            Object.entries(MDXTab.instances).forEach(function (instance, key) {
                 if (instance.getTabName() != mdxTab.getTabName()) {
                     instance.setTabVisibility(false);
                 } else {
@@ -304,7 +304,7 @@ function MDXslider(text, gx, gy, val, min, max) {
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
     Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
-
+  
     var valueArray = new Array(2);
     valueArray[0] = relval;
     valueArray[1] = val;
@@ -340,7 +340,7 @@ function MDXverticalslider(text, gx, gy, val, min, max, centered) {
     Render.Rect(gx - 1, gy + 11, 12, 92, [27, 27, 27, 255]);
     Render.StringCustom(textx, texty, 0, text, [255, 255, 255, 150], font);
     Render.StringCustom(gx + 15, gy + 90 - val + 5, 0, "" + relval, [255, 255, 255, 150], font);
-
+  
     var valueArray = new Array(2);
     valueArray[0] = relval;
     valueArray[1] = val;
@@ -605,26 +605,107 @@ function MDXloadconfig() {
     return config;
 }
 
-//#region Exported variables
-exports.agx = agx;
-exports.agy = agy;
-//#endregion
+var tab1 = false;
+var tab2 = false;
 
-//#region Exported functions
-exports.menu = MDXmenu;
-exports.tab = MDXtab;
-exports.MDXTab = MDXTab;
-exports.drag = MDXdrag;
-exports.checkbox = MDXcheckbox;
-exports.slider = MDXslider;
-exports.verticalslider = MDXverticalslider;
-exports.sliderfloat = MDXsliderfloat;
-exports.colorslider = MDXcolorslider;
-exports.button = MDXbutton;
-exports.dropdown = MDXdropdown;
-exports.textbox = MDXtextbox;
-exports.colorpicker = MDXcolorpicker;
-exports.saveconfig = MDXsaveconfig;
-exports.loadconfig = MDXloadconfig;
-exports.base = Base64;
-//#endregion
+var textboxstring = "false";
+
+var checkboxvalue = false;
+
+var arrayopened = false;
+var chosenoption = 0;
+
+var colorpickeropened = false;
+var colorpicker2opened = false;
+
+var slidervalue = [25, 25];
+var verticalslidervalue = [10, 10];
+var sliderfloat = [0.5, 0.5];
+
+var ar = 80;
+var ag = 110;
+var ab = 200;
+var aa = 255;
+
+var br = 100;
+var bg = 1;
+var bb = 99;
+var ba = 255;
+
+function main() {
+    var tabBaseY = agy + 30;
+    var sx = agx + 143;
+    var sy = tabBaseY;
+
+    MDXmenu("MDX", "GUI", agx, agy, 500, 300, ar, ag, ab);
+    if (MDXdrag(agx, agy).x != 200 || MDXdrag(agx, agy).y != 200) {
+        agx = MDXdrag(agx, agy).x - 150;
+        agy = MDXdrag(agx, agy).y - 10;
+    }
+
+    var myTab1 = new MDXTab("tab1", true, agx + 10, tabBaseY);
+    var myTab2 = new MDXTab("tab2", false, agx + 10, tabBaseY + 20);
+
+    MDXtab(myTab1);
+    MDXtab(myTab2);
+
+    if (myTab1.getTabVisibility()) {
+        if (MDXcheckbox("checkbox", sx, sy, checkboxvalue))
+            checkboxvalue = !checkboxvalue;
+
+        textboxstring = MDXtextbox("textbox", sx, sy + 15, textboxstring);
+
+        if (MDXbutton("Save config", sx, sy + 50)) {
+            var config = '{ "slidervalue":' + slidervalue + ', "verticalslidervalue":' + verticalslidervalue + ', "checkboxvalue":' + checkboxvalue +
+                ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "colors":[{"r":' + ar +
+                ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}]}';
+            MDXsaveconfig(config);
+        }
+
+        if (MDXbutton("Load config", sx, sy + 80)) {
+            var cfg = JSON.parse(MDXloadconfig());
+            slidervalue = cfg.slidervalue;
+            verticalslidervalue = cfg.verticalslidervalue;
+            checkboxvalue = cfg.checkboxvalue;
+            textboxstring = cfg.textboxstring;
+            chosenoption = cfg.chosenoption;
+            ar = cfg.colors[0].r;
+            ag = cfg.colors[0].g;
+            ab = cfg.colors[0].b;
+            aa = cfg.colors[0].a;
+        }
+        verticalslidervalue = MDXverticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
+        Cheat.Print(verticalslidervalue[0] + "\n");
+    }
+
+    if (myTab2.getTabVisibility()) {
+        slidervalue = MDXslider("slider", sx, sy + 33, slidervalue[1], -90, 5);
+        Cheat.Print(slidervalue[0] + "\n");
+        sliderfloat = MDXsliderfloat("float", sx, sy + 63, sliderfloat[1], 0, 1);
+        Cheat.Print(sliderfloat[0] + "\n");
+
+        var colorpicker = MDXcolorpicker("color picker", sx, sy + 93, ar, ag, ab, aa, colorpickeropened);
+        if (colorpicker != undefined) {
+            if (colorpicker == "closed") {
+                colorpickeropened = !colorpickeropened;
+            } else {
+                ar = colorpicker.r;
+                ag = colorpicker.g;
+                ab = colorpicker.b;
+                aa = colorpicker.a;
+            }
+        }
+
+        var dropdownoptions = ["bruh", "ok", "lmao", "nice", "lmao", "test", "because i can"];
+        var dropdown = MDXdropdown("dropdown", sx, sy, dropdownoptions, arrayopened, dropdownoptions[chosenoption]);
+        if (dropdown != undefined) {
+            if (dropdown == "closed") {
+                arrayopened = !arrayopened;
+            } else {
+                chosenoption = dropdown;
+            }
+        }
+    }
+}
+
+Cheat.RegisterCallback("Draw", "main");
