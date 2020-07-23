@@ -71,12 +71,33 @@ function main() {
             ab = cfg.colors[0].b;
             aa = cfg.colors[0].a;
         }
-        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
-        Cheat.Print(verticalslidervalue[0] + "\n");
+
+        if (MDX.button("Import config", sx, sy + 110)) {
+            var configname = "MDX_config";
+            var cfg = JSON.parse(MDX.importconfig(configname));
+            slidervalue[1] = cfg.slidervalue;
+            verticalslidervalue[1] = cfg.verticalslidervalue;
+            checkboxvalue = cfg.checkboxvalue;
+            textboxstring = cfg.textboxstring;
+            chosenoption = cfg.chosenoption;
+            ar = cfg.colors[0].r;
+            ag = cfg.colors[0].g;
+            ab = cfg.colors[0].b;
+            aa = cfg.colors[0].a;
+        }
+
+        if (MDX.button("Export config", sx, sy + 140)) {
+            MDX.exportconfig();
+        }
+
+        verticalslidervalue = MDX.verticalslider("centered", sx + 150, sy + 30, verticalslidervalue[1], -100, 100, true);
+        //Cheat.Print(verticalslidervalue[0] + "\n");
 
         hotkey = MDX.hotkey("hotkey", sx + 150, sy, hotkey);
-        if (Input.IsKeyPressed(hotkey))
-            Cheat.Print("hotkey activated!" + "\n");
+        if (Input.IsKeyPressed(hotkey)) {
+
+        }
+        //Cheat.Print("hotkey activated!" + "\n");
     }
 
     if (myTab2.getTabVisibility()) {

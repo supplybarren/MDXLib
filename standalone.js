@@ -654,6 +654,17 @@ function MDXloadconfig() {
     return config;
 }
 
+function MDXimportconfig(config) {
+    Cheat.ExecuteCommand("exec " + config);
+    var loadconfig = MDXloadconfig();
+    return loadconfig;
+}
+
+function MDXexportconfig() {
+    var cmd = Convar.GetString("xbox_throttlespoof");
+    Cheat.Print(cmd + "\n");
+}
+
 var tab1 = false;
 var tab2 = false;
 
@@ -707,7 +718,7 @@ function main() {
         textboxstring = MDXtextbox("textbox", sx, sy + 15, textboxstring);
 
         if (MDXbutton("Save config", sx, sy + 50)) {
-            var config = '{ "slidervalue":' + slidervalue + ', "verticalslidervalue":' + verticalslidervalue + ', "checkboxvalue":' + checkboxvalue +
+            var config = '{ "slidervalue":' + slidervalue[1] + ', "verticalslidervalue":' + verticalslidervalue[1] + ', "checkboxvalue":' + checkboxvalue +
                 ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "colors":[{"r":' + ar +
                 ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}]}';
             MDXsaveconfig(config);
@@ -715,8 +726,8 @@ function main() {
 
         if (MDXbutton("Load config", sx, sy + 80)) {
             var cfg = JSON.parse(MDXloadconfig());
-            slidervalue = cfg.slidervalue;
-            verticalslidervalue = cfg.verticalslidervalue;
+            slidervalue[1] = cfg.slidervalue;
+            verticalslidervalue[1] = cfg.verticalslidervalue;
             checkboxvalue = cfg.checkboxvalue;
             textboxstring = cfg.textboxstring;
             chosenoption = cfg.chosenoption;
@@ -725,12 +736,33 @@ function main() {
             ab = cfg.colors[0].b;
             aa = cfg.colors[0].a;
         }
-        verticalslidervalue = MDXverticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
-        Cheat.Print(verticalslidervalue[0] + "\n");
+
+        if (MDXbutton("Import config", sx, sy + 110)) {
+            var configname = "MDX_config";
+            var cfg = JSON.parse(MDXimportconfig(configname));
+            slidervalue[1] = cfg.slidervalue;
+            verticalslidervalue[1] = cfg.verticalslidervalue;
+            checkboxvalue = cfg.checkboxvalue;
+            textboxstring = cfg.textboxstring;
+            chosenoption = cfg.chosenoption;
+            ar = cfg.colors[0].r;
+            ag = cfg.colors[0].g;
+            ab = cfg.colors[0].b;
+            aa = cfg.colors[0].a;
+        }
+
+        if (MDXbutton("Export config", sx, sy + 140)) {
+            MDXexportconfig();
+        }
+
+        verticalslidervalue = MDXverticalslider("centered", sx + 150, sy + 30, verticalslidervalue[1], -100, 100, true);
+        //Cheat.Print(verticalslidervalue[0] + "\n");
 
         hotkey = MDXhotkey("hotkey", sx + 150, sy, hotkey);
-        if (Input.IsKeyPressed(hotkey))
-            Cheat.Print("hotkey activated!" + "\n");
+        if (Input.IsKeyPressed(hotkey)) {
+
+        }
+        //Cheat.Print("hotkey activated!" + "\n");
     }
 
     if (myTab2.getTabVisibility()) {
