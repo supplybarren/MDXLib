@@ -654,6 +654,17 @@ function MDXloadconfig() {
     return config;
 }
 
+function MDXimportconfig(config) {
+    Cheat.ExecuteCommand("exec " + config);
+    var loadconfig = MDXloadconfig();
+    return loadconfig;
+}
+
+function MDXexportconfig() {
+    var cmd = Convar.GetString("xbox_throttlespoof");
+    Cheat.Print(cmd + "\n");
+}
+
 //#region Exported variables
 exports.agx = agx;
 exports.agy = agy;
@@ -675,6 +686,8 @@ exports.textbox = MDXtextbox;
 exports.colorpicker = MDXcolorpicker;
 exports.saveconfig = MDXsaveconfig;
 exports.loadconfig = MDXloadconfig;
+exports.importconfig = MDXimportconfig;
+exports.exportconfig = MDXexportconfig;
 exports.hotkey = MDXhotkey;
 exports.base = Base64;
 //#endregion
