@@ -644,6 +644,32 @@ function MDXhotkey(text, gx, gy, keyNum) {
     return keyNum;
 }
 
+function MDXwatermark(text, text2, position, offset, username) {
+    var font = Render.AddFont("Tahoma", 7, 700);
+    var x = offset;
+    var y = offset;
+    var user = " - " + Cheat.GetUsername();
+    var textsizey = Render.TextSizeCustom(text, font)[1] / 2 - 2;
+    var text1sizex = Render.TextSizeCustom(text, font)[0];
+    var text2sizex = Render.TextSizeCustom(text2, font)[0];
+    var watermarksize = (Render.TextSizeCustom(text, font)[0] + Render.TextSizeCustom(text2, font)[0]) + 20;
+    if (username)
+        watermarksize += Render.TextSizeCustom(user, font)[0];
+
+    var screensize = Render.GetScreenSize();
+    if (position == 1) {
+        x = screensize[0] - watermarksize - offset;
+    }
+
+    Render.FilledRect(x, y, watermarksize, 17, [9, 9, 9, 255]);
+    Render.Rect(x, y, watermarksize, 17, [27, 27, 27, 255]);
+    Render.Rect(x - 1, y - 1, watermarksize + 2, 19, [0, 0, 0, 255]);
+    Render.StringCustom(x + 9, y + textsizey, 0, text, [r, g, b, 255], font);
+    Render.StringCustom(x + 10 + text1sizex, y + textsizey, 0, text2, [255, 255, 255, 150], font);
+    if (username)
+        Render.StringCustom(x + 11 + text1sizex + text2sizex, y + textsizey, 0, user, [255, 255, 255, 150], font);
+}
+
 function MDXsaveconfig(json) {
     var config = Base64.encode(json);
     Cheat.ExecuteCommand("xbox_throttlespoof " + config);
@@ -698,6 +724,8 @@ function main() {
     var tabBaseY = agy + 30;
     var sx = agx + 143;
     var sy = tabBaseY;
+
+    MDXwatermark("MDX", "GUI", 1, 25, true);
 
     MDXmenu("MDX", "GUI", agx, agy, 500, 300, ar, ag, ab);
     if (MDXdrag(agx, agy).x != 200 || MDXdrag(agx, agy).y != 200) {
@@ -790,6 +818,7 @@ function main() {
                 arrayopened = !arrayopened;
             } else {
                 chosenoption = dropdown;
+                arrayopened = !arrayopened;
             }
         }
     }

@@ -34,6 +34,8 @@ function main() {
     var sx = MDX.agx + 143;
     var sy = tabBaseY;
 
+    MDX.watermark("MDX", "GUI", 1, 25, true);
+
     MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300, ar, ag, ab);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200) {
         MDX.agx = MDX.drag(MDX.agx, MDX.agy).x - 150;
@@ -50,7 +52,7 @@ function main() {
         if (MDX.checkbox("checkbox", sx, sy, checkboxvalue))
             checkboxvalue = !checkboxvalue;
 
-        textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring);
+        textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring, true);
 
         if (MDX.button("Save config", sx, sy + 50)) {
             var config = '{ "slidervalue":' + slidervalue[1] + ', "verticalslidervalue":' + verticalslidervalue[1] + ', "checkboxvalue":' + checkboxvalue +
@@ -125,6 +127,7 @@ function main() {
                 arrayopened = !arrayopened;
             } else {
                 chosenoption = dropdown;
+                arrayopened = !arrayopened;
             }
         }
     }
