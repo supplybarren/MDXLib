@@ -27,10 +27,14 @@ var bg = 1;
 var bb = 99;
 var ba = 255;
 
+var hotkey = 0x01;
+
 function main() {
     var tabBaseY = MDX.agy + 30;
     var sx = MDX.agx + 143;
     var sy = tabBaseY;
+
+    MDX.watermark("MDX", "GUI", 1, 25, true);
 
     MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300, ar, ag, ab);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200) {
@@ -48,10 +52,10 @@ function main() {
         if (MDX.checkbox("checkbox", sx, sy, checkboxvalue))
             checkboxvalue = !checkboxvalue;
 
-        textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring);
+        textboxstring = MDX.textbox("textbox", sx, sy + 15, textboxstring, true);
 
         if (MDX.button("Save config", sx, sy + 50)) {
-            var config = '{ "slidervalue":' + slidervalue + ', "verticalslidervalue":' + verticalslidervalue + ', "checkboxvalue":' + checkboxvalue +
+            var config = '{ "slidervalue":' + slidervalue[1] + ', "verticalslidervalue":' + verticalslidervalue[1] + ', "checkboxvalue":' + checkboxvalue +
                 ', "arrayopened":' + arrayopened + ', "chosenoption":' + chosenoption + ', "textboxstring":"' + textboxstring + '", "colors":[{"r":' + ar +
                 ', "g":' + ag + ', "b":' + ab + ', "a":' + aa + '}]}';
             MDX.saveconfig(config);
@@ -59,8 +63,8 @@ function main() {
 
         if (MDX.button("Load config", sx, sy + 80)) {
             var cfg = JSON.parse(MDX.loadconfig());
-            slidervalue = cfg.slidervalue;
-            verticalslidervalue = cfg.verticalslidervalue;
+            slidervalue[1] = cfg.slidervalue;
+            verticalslidervalue[1] = cfg.verticalslidervalue;
             checkboxvalue = cfg.checkboxvalue;
             textboxstring = cfg.textboxstring;
             chosenoption = cfg.chosenoption;
@@ -69,8 +73,33 @@ function main() {
             ab = cfg.colors[0].b;
             aa = cfg.colors[0].a;
         }
-        verticalslidervalue = MDX.verticalslider("centered", sx, sy + 110, verticalslidervalue[1], -100, 100, true);
-        Cheat.Print(verticalslidervalue[0] + "\n");
+
+        if (MDX.button("Import config", sx, sy + 110)) {
+            var configname = "MDX_config";
+            var cfg = JSON.parse(MDX.importconfig(configname));
+            slidervalue[1] = cfg.slidervalue;
+            verticalslidervalue[1] = cfg.verticalslidervalue;
+            checkboxvalue = cfg.checkboxvalue;
+            textboxstring = cfg.textboxstring;
+            chosenoption = cfg.chosenoption;
+            ar = cfg.colors[0].r;
+            ag = cfg.colors[0].g;
+            ab = cfg.colors[0].b;
+            aa = cfg.colors[0].a;
+        }
+
+        if (MDX.button("Export config", sx, sy + 140)) {
+            MDX.exportconfig();
+        }
+
+        verticalslidervalue = MDX.verticalslider("centered", sx + 150, sy + 30, verticalslidervalue[1], -100, 100, true);
+        //Cheat.Print(verticalslidervalue[0] + "\n");
+
+        hotkey = MDX.hotkey("hotkey", sx + 150, sy, hotkey);
+        if (Input.IsKeyPressed(hotkey)) {
+
+        }
+        //Cheat.Print("hotkey activated!" + "\n");
     }
 
     if (myTab2.getTabVisibility()) {
@@ -98,6 +127,7 @@ function main() {
                 arrayopened = !arrayopened;
             } else {
                 chosenoption = dropdown;
+                arrayopened = !arrayopened;
             }
         }
     }
