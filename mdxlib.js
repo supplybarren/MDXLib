@@ -696,55 +696,6 @@ function MDXsliderfloat(text, gx, gy, val, min, max) {
     return valueArray;
 }
 
-function MDXcolorslider(text, gx, gy, val, color) {
-    var curPos = Input.GetCursorPosition();
-    var curx = curPos[0];
-    var cury = curPos[1];
-    var texty = gy;
-    var relval = val;
-    var font = Render.AddFont("Tahoma", 7, 700);
-    if (curx > (gx - 1) && curx < (gx + 256) && cury > (gy + 12) && cury < (gy + 12 + 10)) {
-        texty = gy - 2;
-        if (color == "red")
-            Render.Rect(gx - 3, gy + 9, 261, 16, [200, 0, 0, 255]);
-        if (color == "green")
-            Render.Rect(gx - 3, gy + 9, 261, 16, [0, 200, 0, 255]);
-        if (color == "blue")
-            Render.Rect(gx - 3, gy + 9, 261, 16, [80, 110, 200, 255]);
-        if (color == "alpha")
-            Render.Rect(gx - 3, gy + 9, 261, 16, [200, 200, 200, 255]);
-        if (Input.IsKeyPressed(0x01)) {
-            val = curx - gx;
-            relval = val;
-        }
-    }
-    if (val > 255)
-        val = 255;
-    if (color == "red") {
-        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [200, 0, 0, 255], [150, 0, 0, 255]);
-        Render.Rect(gx + 1, gy + 13, val - 2, 8, [200, 0, 0, 255]);
-        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
-    }
-    if (color == "green") {
-        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [0, 200, 0, 255], [0, 150, 0, 255]);
-        Render.Rect(gx + 1, gy + 13, val - 2, 8, [0, 200, 0, 255]);
-        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
-    }
-    if (color == "blue") {
-        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [80, 110, 200, 255], [59, 81, 148, 255]);
-        Render.Rect(gx + 1, gy + 13, val - 2, 8, [80, 110, 200, 255]);
-        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
-    }
-    if (color == "alpha") {
-        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [200, 200, 200, 255], [150, 150, 150, 255]);
-        Render.Rect(gx + 1, gy + 13, val - 2, 8, [200, 200, 200, 255]);
-        Render.Line(gx - 2, gy + 12, gx - 2, gy + 21, [9, 9, 9, 255]);
-    }
-    Render.Rect(gx - 1, gy + 11, 257, 12, [45, 45, 45, 255]);
-    Render.StringCustom(gx, texty, 0, text + " - " + relval, [255, 255, 255, 150], font);
-    return val;
-}
-
 function MDXbutton(text, gx, gy) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
@@ -886,6 +837,12 @@ function MDXcolorpicker(text, gx, gy, color, open) {
         var finalstagecolor = HSVtoRGB(endcolor.h, endcolor.s, endcolor.v);
     }
     Render.FilledRect(gx + 2, gy + 14, 21, 11, [finalstagecolor.r, finalstagecolor.g, finalstagecolor.b, endcolor.a]);
+    return {
+        r: finalstagecolor.r,
+        g: finalstagecolor.g,
+        b: finalstagecolor.b,
+        a: finalstagecolor.a
+    };
 }
 
 function MDXhotkey(text, gx, gy, keyNum) {
@@ -935,32 +892,6 @@ function MDXhotkey(text, gx, gy, keyNum) {
     return keyNum;
 }
 
-function MDXwatermark(text, text2, position, offset, username) {
-    var font = Render.AddFont("Tahoma", 7, 700);
-    var x = offset;
-    var y = offset;
-    var user = " - " + Cheat.GetUsername();
-    var textsizey = Render.TextSizeCustom(text, font)[1] / 2 - 2;
-    var text1sizex = Render.TextSizeCustom(text, font)[0];
-    var text2sizex = Render.TextSizeCustom(text2, font)[0];
-    var watermarksize = (Render.TextSizeCustom(text, font)[0] + Render.TextSizeCustom(text2, font)[0]) + 20;
-    if (username)
-        watermarksize += Render.TextSizeCustom(user, font)[0];
-
-    var screensize = Render.GetScreenSize();
-    if (position == 1) {
-        x = screensize[0] - watermarksize - offset;
-    }
-
-    Render.FilledRect(x, y, watermarksize, 17, [9, 9, 9, 255]);
-    Render.Rect(x, y, watermarksize, 17, [27, 27, 27, 255]);
-    Render.Rect(x - 1, y - 1, watermarksize + 2, 19, [0, 0, 0, 255]);
-    Render.StringCustom(x + 9, y + textsizey, 0, text, [r, g, b, 255], font);
-    Render.StringCustom(x + 10 + text1sizex, y + textsizey, 0, text2, [255, 255, 255, 150], font);
-    if (username)
-        Render.StringCustom(x + 11 + text1sizex + text2sizex, y + textsizey, 0, user, [255, 255, 255, 150], font);
-}
-
 function MDXsaveconfig(json) {
     var config = Base64.encode(json);
     Cheat.ExecuteCommand("xbox_throttlespoof " + config);
@@ -996,12 +927,10 @@ exports.checkbox = MDXcheckbox;
 exports.slider = MDXslider;
 exports.verticalslider = MDXverticalslider;
 exports.sliderfloat = MDXsliderfloat;
-exports.colorslider = MDXcolorslider;
 exports.button = MDXbutton;
 exports.dropdown = MDXdropdown;
 exports.textbox = MDXtextbox;
 exports.colorpicker = MDXcolorpicker;
-exports.watermark = MDXwatermark;
 exports.saveconfig = MDXsaveconfig;
 exports.loadconfig = MDXloadconfig;
 exports.importconfig = MDXimportconfig;
