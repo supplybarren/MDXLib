@@ -22,7 +22,7 @@ var ag = 110;
 var ab = 200;
 var aa = 255;
 
-var colorpickercolor = MDX.create_color(80, 110, 200, 255);
+var colorpickercolor = MDX.create_color(225, 60, 78, 255);
 
 var br = 100;
 var bg = 1;

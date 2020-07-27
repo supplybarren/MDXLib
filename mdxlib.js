@@ -287,8 +287,7 @@ function color_picker(x, y, w, h, color) {
     );
 
     //Draw preview of the selected color and transparency slider
-    Render.Rect(alpha_slider.x, alpha_slider.y, alpha_slider.w, alpha_slider.h, [0, 0, 0, 255])
-    Render.TexturedRect(alpha_slider.x + 1, alpha_slider.y + 1, alpha_slider.w - 2, alpha_slider.h - 2, Render.AddTexture("ot/scripts/transparency_overlay.png"));
+    Render.Rect(alpha_slider.x, alpha_slider.y, alpha_slider.w, alpha_slider.h, [0, 0, 0, 255]);
     var alpha = 255 / (picker.w);
 
     for (var i = 0; i < picker.w - 2; i++) {
@@ -586,7 +585,7 @@ function MDXcheckbox(text, gx, gy, enabled) {
     var textsize = Render.TextSizeCustom(text, font);
     Render.GradientRect(gx, gy, 10, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
     if (enabled) {
-        Render.GradientRect(gx + 2, gy + 2, 6, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.FilledRect(gx + 2, gy + 2, 6, 6, [r, g, b, 255]);
         Render.Rect(gx + 1, gy + 1, 8, 8, [r, g, b, 255]);
     }
     if (curx > gx && curx < (gx + 10 + 5 + textsize[0]) && cury > gy && cury < (gy + 10)) {
@@ -617,7 +616,7 @@ function MDXslider(text, gx, gy, val, min, max) {
     }
     Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
     if (val != 0) {
-        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.FilledRect(gx + 2, gy + 14, val - 4, 6, [r, g, b, 255]);
         Render.Rect(gx + 1, gy + 13, val - 2, 8, [r, g, b, 255]);
     }
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
@@ -652,7 +651,7 @@ function MDXverticalslider(text, gx, gy, val, min, max, centered) {
         }
     }
     if (val != 0) {
-        Render.GradientRect(gx + 2, gy + 15 + 90 - val - 4, 6, val, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.FilledRect(gx + 2, gy + 15 + 90 - val - 4, 6, val, [r, g, b, 255]);
         Render.Rect(gx + 1, gy + 13 + 90 - val - 2, 8, val, [r, g, b, 255]);
     }
     Render.Rect(gx, gy + 12, 10, 90, [0, 0, 0, 255]);
@@ -683,7 +682,7 @@ function MDXsliderfloat(text, gx, gy, val, min, max) {
     }
     Render.GradientRect(gx, gy + 12, 90, 10, 0, [12, 12, 12, 255], [24, 24, 24, 255]);
     if (val != 0) {
-        Render.GradientRect(gx + 2, gy + 14, val - 4, 6, 0, [r, g, b, 255], [r - 20, g - 30, b - 50, 255]);
+        Render.FilledRect(gx + 2, gy + 14, val - 4, 6, [r, g, b, 255]);
         Render.Rect(gx + 1, gy + 13, val - 2, 8, [r, g, b, 255]);
     }
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
