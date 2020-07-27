@@ -36,8 +36,6 @@ function main() {
     var sx = MDX.agx + 143;
     var sy = tabBaseY;
 
-    MDX.watermark("MDX", "GUI", 1, 25, false);
-
     MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300, ar, ag, ab);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200) {
         MDX.agx = MDX.drag(MDX.agx, MDX.agy).x - 150;
@@ -106,13 +104,18 @@ function main() {
 
     if (myTab2.getTabVisibility()) {
         slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue[1], -90, 5);
-        Cheat.Print(slidervalue[0] + "\n");
+        //heat.Print(slidervalue[0] + "\n");
         sliderfloat = MDX.sliderfloat("float", sx, sy + 63, sliderfloat[1], 0, 1);
-        Cheat.Print(sliderfloat[0] + "\n");
+        //Cheat.Print(sliderfloat[0] + "\n");
         var colorpicker = MDX.colorpicker("color picker", sx, sy + 93, colorpickercolor, colorpickeropened);
         if (colorpicker != undefined) {
             if (colorpicker == "closed") {
                 colorpickeropened = !colorpickeropened;
+            } else {
+                ar = colorpicker.r;
+                ag = colorpicker.g;
+                ab = colorpicker.b;
+                aa = colorpicker.a;
             }
         }
 
