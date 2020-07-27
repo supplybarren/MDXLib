@@ -27,6 +27,321 @@ if (!Object.entries) {
 }
 //#endregion
 
+//#region extended color picker by Brotgeschmack
+function HUEtoRGB(h) {
+    var r = 0, g = 0, b = 0;
+
+    var z = Math.floor(h / 60);
+    var hi = z % 6;
+    var f = h / 60 - z;
+
+    switch (hi) {
+        case 0:
+            {
+                r = 1;
+                g = f;
+                b = 0;
+                break;
+            }
+        case 1:
+            {
+                r = (1 - f);
+                g = 1;
+                b = 0;
+                break;
+            }
+        case 2:
+            {
+                r = 0;
+                g = 1;
+                b = f;
+                break;
+            }
+        case 3:
+            {
+                r = 0;
+                g = (1 - f);
+                b = 1;
+                break;
+            }
+        case 4:
+            {
+                r = f;
+                g = 0;
+                b = 1;
+                break
+            }
+        case 5:
+            {
+                r = 1;
+                g = 0;
+                b = (1 - f);
+                break;
+            }
+    }
+
+    return [r * 255, g * 255, b * 255, 255]
+}
+
+function HSVtoRGB(h, s, v) {
+    var r = 0, g = 0, b = 0;
+
+    var tempS = s / 100;
+    var tempV = v / 100;
+
+    var hi = Math.floor(h / 60) % 6;
+    var f = h / 60 - Math.floor(h / 60);
+    var p = (tempV * (1 - tempS));
+    var q = (tempV * (1 - f * tempS));
+    var t = (tempV * (1 - (1 - f) * tempS));
+
+    switch (hi) {
+        case 0:
+            {
+                r = tempV;
+                g = t;
+                b = p;
+                break;
+            }
+        case 1:
+            {
+                r = q;
+                g = tempV;
+                b = p;
+                break;
+            }
+        case 2:
+            {
+                r = p;
+                g = tempV;
+                b = t;
+                break;
+            }
+        case 3:
+            {
+                r = p;
+                g = q;
+                b = tempV;
+                break;
+            }
+        case 4:
+            {
+                r = t;
+                g = p;
+                b = tempV;
+                break
+            }
+        case 5:
+            {
+                r = tempV;
+                g = p;
+                b = q;
+                break;
+            }
+    }
+    return { r: r * 255, g: g * 255, b: b * 255 };
+}
+
+function RGBToHSV(red, green, blue) {
+    var hue = 0, saturation = 0, value = 0;
+
+    var min_value = Math.min(red, green, blue);
+    var max_value = Math.max(red, green, blue);
+
+    value = max_value;
+
+    var value_delta = max_value - min_value;
+
+    Cheat.Print(value_delta + " " + max_value + "\n")
+    if (max_value != 0) {
+        saturation = value_delta / max_value;
+    } else {
+        saturation = 0;
+        hue = -1;
+        return { h: hue, s: saturation * 100, v: value / 2.55 };
+    }
+
+    if (red == max_value) {
+        hue = (green - blue) / value_delta;
+    } else if (green == max_value) {
+        hue = 2 + (blue - red) / value_delta;
+    } else {
+        hue = 4 + (red - green) / value_delta;
+    }
+
+    hue = hue * 60;
+    if (hue < 0) {
+        hue = hue + 360;
+    }
+
+    return { h: hue, s: saturation * 100, v: value / 2.55 };
+}
+
+function create_color(h, s, v, a) {
+    return { h: h, s: s, v: v, a: a };
+}
+
+function get_cursor_positon() {
+    var input = Input.GetCursorPosition();
+    return { x: input[0], y: input[1] };
+}
+
+function in_boundary(cursor, x1, y1, x2, y2) {
+    var boundary = { x: cursor.x, y: cursor.y };
+    if (cursor.x < x1)
+        boundary.x = x1
+    if (cursor.y < y1)
+        boundary.y = y1
+    if (cursor.x > x1 + x2)
+        boundary.x = x1 + x2
+    if (cursor.y > y1 + y2)
+        boundary.y = y1 + y2
+
+    if (cursor.x >= x1 && cursor.y >= y1 && cursor.x <= x1 + x2 && cursor.y <= y1 + y2)
+        return { in_boundary: true, boundary: boundary };
+
+    return { in_boundary: false, boundary: boundary };
+}
+
+var keys_down = { picker: false, hue: false, alpha: false, outside: false };
+
+function color_picker(x, y, w, h, color) {
+    var cursor = get_cursor_positon();
+
+    var window = {
+        x: x,
+        y: y,
+        w: w,
+        h: h
+    }
+
+    var picker = {
+        x: window.x + 5,
+        y: window.y + 5,
+        w: window.w - 35,
+        h: window.h - 35
+    }
+
+    var hue = {
+        x: picker.x + picker.w + 5,
+        y: picker.y,
+        w: 20,
+        h: picker.h
+    }
+
+    var alpha_slider = {
+        x: picker.x,
+        y: picker.y + picker.h + 5,
+        w: picker.w,
+        h: 20
+    }
+
+    var preview = {
+        x: picker.x + picker.w + 5,
+        y: picker.y + picker.h + 5,
+        w: 20,
+        h: 20
+    }
+
+    var rgb = HSVtoRGB(color.h, color.s, color.v);
+    var picker_boundary = in_boundary(cursor, picker.x, picker.y, picker.w, picker.h);
+    var hue_boundary = in_boundary(cursor, hue.x, picker.y, hue.w, picker.h);
+    var alpha_boundary = in_boundary(cursor, alpha_slider.x, alpha_slider.y, alpha_slider.w, alpha_slider.h);
+
+    //Draw Window
+    Render.Rect(window.x, window.y, window.w, window.h, [0, 0, 0, 255])
+    Render.FilledRect(window.x + 1, window.y + 1, window.w - 2, window.h - 2, [40, 40, 40, 255])
+
+    //Draw Preview
+    Render.Rect(preview.x, preview.y, preview.w, preview.h, [0, 0, 0, 255])
+    Render.FilledRect(preview.x + 1, preview.y + 1, preview.w - 2, preview.h - 2, [rgb.r, rgb.g, rgb.b, 255])
+
+    //Draws the picking area
+    Render.Rect(picker.x, picker.y, picker.w, picker.h, [0, 0, 0, 255])
+    //Render.FilledRect(picker.x + 1, picker.y + 1, picker.w - 2, picker.h - 2, HUEtoRGB(color.h));
+    Render.GradientRect(picker.x + 1, picker.y + 1, picker.w - 2, picker.h - 2, 1, [255, 255, 255, 255], HUEtoRGB(color.h));
+    Render.GradientRect(picker.x + 1, picker.y + 1, picker.w - 2, picker.h - 2, 0, [0, 0, 0, 0], [0, 0, 0, 255]);
+
+    //Draws the hue slider
+    Render.Rect(hue.x, hue.y, hue.w, hue.h, [0, 0, 0, 255])
+    for (var i = 0; i < picker.h - 2; i++) {
+        Render.FilledRect(hue.x + 1, hue.y + i + 1, hue.w - 2, 1, HUEtoRGB(i * (360 / (picker.h - 1))))
+    }
+
+    //Draw position of the current selected color on the picking area
+    Render.Rect(
+        picker.x + (color.s * ((picker.w - 2) / 100)) - 1,
+        picker.y - (color.v * ((picker.h - 2) / 100)) + picker.h - 3,
+        5,
+        5,
+        [255 - (color.v * 2.55), 255 - (color.v * 2.55), 255 - (color.v * 2.55), 255]
+    );
+
+    //Draw position of the current selected hue on the hue slider
+    Render.Rect(
+        hue.x - 1,
+        picker.y + (((picker.h - 2) / 360) * color.h) - 1,
+        hue.w + 2,
+        4,
+        [55, 0, 0, 255]
+    );
+
+    //Draw preview of the selected color and transparency slider
+    Render.Rect(alpha_slider.x, alpha_slider.y, alpha_slider.w, alpha_slider.h, [0, 0, 0, 255])
+    Render.TexturedRect(alpha_slider.x + 1, alpha_slider.y + 1, alpha_slider.w - 2, alpha_slider.h - 2, Render.AddTexture("ot/scripts/transparency_overlay.png"));
+    var alpha = 255 / (picker.w);
+
+    for (var i = 0; i < picker.w - 2; i++) {
+        Render.FilledRect(alpha_slider.x + i + 1, alpha_slider.y + 1, 1, alpha_slider.h - 2, [rgb.r, rgb.g, rgb.b, Math.round(alpha * i)]);
+    }
+
+    Render.Rect(
+        alpha_slider.x - 1 + color.a / (255 / (picker.w - 2)),
+        alpha_slider.y - 1,
+        4,
+        alpha_slider.h + 2,
+        [55, 0, 0, 255]
+    );
+
+    //Some error handling (I suck at explaining)
+    if (Input.IsKeyPressed(1) && !picker_boundary.in_boundary && !alpha_boundary.in_boundary && !keys_down.picker && !hue_boundary.in_boundary && !keys_down.hue && !keys_down.alpha)
+        keys_down.outside = true;
+
+    //Get color from the mouse position on the picking area
+    if (Input.IsKeyPressed(1) && (picker_boundary.in_boundary || keys_down.picker) && !keys_down.hue && !keys_down.alpha && !keys_down.outside) {
+        cursor = picker_boundary.boundary;
+        color.s = (cursor.x - picker.x) / picker.w * 100;
+        color.v = ((picker.y - cursor.y) / picker.h * 100) + 100;
+
+        rgb = HSVtoRGB(color.h, color.s, color.v);
+        keys_down.picker = true;
+    }
+
+    //Get hue from the mouse position on the hue slider
+    if (Input.IsKeyPressed(1) && (hue_boundary.in_boundary || keys_down.hue) && !keys_down.picker && !keys_down.alpha && !keys_down.outside) {
+        cursor = hue_boundary.boundary;
+        color.h = Math.floor(((cursor.y - picker.y) / picker.h) * 360);
+
+        rgb = HSVtoRGB(color.h, color.s, color.v);
+        keys_down.hue = true;
+    }
+
+    //Get hue from the mouse position on the hue slider
+    if (Input.IsKeyPressed(1) && (alpha_boundary.in_boundary || keys_down.alpha) && !keys_down.picker && !keys_down.hue && !keys_down.outside) {
+        cursor = alpha_boundary.boundary;
+        color.a = Math.round(alpha * (cursor.x - picker.x));
+        keys_down.alpha = true;
+    }
+
+    //Reset key states
+    if (!Input.IsKeyPressed(1)) {
+        keys_down = { picker: false, hue: false, alpha: false, outside: false };
+    }
+
+    return { h: color.h, s: color.s, v: color.v, r: rgb.r, g: rgb.b, b: rgb.b, a: color.a };
+}
+//#endregion
+
 var Base64 = {
     _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
     encode: function (input) {
@@ -539,16 +854,13 @@ function MDXtextbox(text, gx, gy, string) {
     return string;
 }
 
-function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
+function MDXcolorpicker(text, gx, gy, color, open) {
     var curPos = Input.GetCursorPosition();
     var curx = curPos[0];
     var cury = curPos[1];
     var font = Render.AddFont("Tahoma", 7, 700);
-    var returnr = ar;
-    var returng = ag;
-    var returnb = ab;
-    var returna = aa;
     var texty = gy;
+    var endcolor = color;
     if (curx > gx && curx < gx + 25 && cury > gy + 12 && cury < gy + 27) {
         Render.Rect(gx - 3, gy + 9, 31, 21, [r, g, b, 255]);
         texty = gy - 2;
@@ -560,26 +872,7 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     if (open) {
         Render.Rect(gx - 3, gy + 9, 31, 21, [r, g, b, 255]);
         texty = gy - 2;
-        Render.FilledRect(gx - 2, gy + 35, 270, 110, [9, 9, 9, 255]);
-        Render.Rect(gx - 2, gy + 35, 270, 110, [27, 27, 27, 255]);
-        Render.FilledRect(gx - 2, gy + 35, 270, 135, [9, 9, 9, 255]);
-        Render.Rect(gx - 2, gy + 35, 270, 135, [27, 27, 27, 255]);
-        returnr = MDXcolorslider("red", gx + 5, gy + 40, returnr, "red");
-        returng = MDXcolorslider("green", gx + 5, gy + 65, returng, "green");
-        returnb = MDXcolorslider("blue", gx + 5, gy + 90, returnb, "blue");
-        returna = MDXcolorslider("alpha", gx + 5, gy + 115, returna, "alpha");
-        if (MDXbutton("Copy", gx + 5, gy + 145)) {
-            savedcolor = Base64.encode('{"r":' + returnr + ', "g":' + returng + ', "b":' + returnb + ', "a":' + returna + '}');
-        }
-        if (MDXbutton("Paste", gx + 60, gy + 145)) {
-            if (savedcolor !== undefined) {
-                var sav_col = JSON.parse(Base64.decode(savedcolor));
-                returnr = sav_col.r;
-                returng = sav_col.g;
-                returnb = sav_col.b;
-                returna = sav_col.a;
-            }
-        }
+        endcolor = color_picker(gx + 5, gy + 35, 200, 200, color);
     }
     Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
     Render.Rect(gx, gy + 12, 25, 15, [0, 0, 0, 255]);
@@ -588,13 +881,11 @@ function MDXcolorpicker(text, gx, gy, ar, ag, ab, aa, open) {
     Render.FilledRect(gx + 12, gy + 14, 11, 5, [255, 255, 255, 255]);
     Render.FilledRect(gx + 2, gy + 19, 10, 6, [255, 255, 255, 255]);
     Render.FilledRect(gx + 12, gy + 19, 11, 6, [214, 214, 214, 255]);
-    Render.FilledRect(gx + 2, gy + 14, 21, 11, [ar, ag, ab, aa]);
-    return {
-        r: returnr,
-        g: returng,
-        b: returnb,
-        a: returna
-    };
+    var finalstagecolor = color;
+    if (endcolor.h !== undefined) {
+        var finalstagecolor = HSVtoRGB(endcolor.h, endcolor.s, endcolor.v);
+    }
+    Render.FilledRect(gx + 2, gy + 14, 21, 11, [finalstagecolor.r, finalstagecolor.g, finalstagecolor.b, endcolor.a]);
 }
 
 function MDXhotkey(text, gx, gy, keyNum) {
@@ -716,5 +1007,6 @@ exports.loadconfig = MDXloadconfig;
 exports.importconfig = MDXimportconfig;
 exports.exportconfig = MDXexportconfig;
 exports.hotkey = MDXhotkey;
+exports.create_color = create_color;
 exports.base = Base64;
 //#endregion

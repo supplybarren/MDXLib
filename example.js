@@ -22,6 +22,8 @@ var ag = 110;
 var ab = 200;
 var aa = 255;
 
+var colorpickercolor = MDX.create_color(80, 110, 200, 255);
+
 var br = 100;
 var bg = 1;
 var bb = 99;
@@ -34,7 +36,7 @@ function main() {
     var sx = MDX.agx + 143;
     var sy = tabBaseY;
 
-    MDX.watermark("MDX", "GUI", 1, 25, true);
+    MDX.watermark("MDX", "GUI", 1, 25, false);
 
     MDX.menu("MDX", "GUI", MDX.agx, MDX.agy, 500, 300, ar, ag, ab);
     if (MDX.drag(MDX.agx, MDX.agy).x != 200 || MDX.drag(MDX.agx, MDX.agy).y != 200) {
@@ -107,16 +109,10 @@ function main() {
         Cheat.Print(slidervalue[0] + "\n");
         sliderfloat = MDX.sliderfloat("float", sx, sy + 63, sliderfloat[1], 0, 1);
         Cheat.Print(sliderfloat[0] + "\n");
-
-        var colorpicker = MDX.colorpicker("color picker", sx, sy + 93, ar, ag, ab, aa, colorpickeropened);
+        var colorpicker = MDX.colorpicker("color picker", sx, sy + 93, colorpickercolor, colorpickeropened);
         if (colorpicker != undefined) {
             if (colorpicker == "closed") {
                 colorpickeropened = !colorpickeropened;
-            } else {
-                ar = colorpicker.r;
-                ag = colorpicker.g;
-                ab = colorpicker.b;
-                aa = colorpicker.a;
             }
         }
 
