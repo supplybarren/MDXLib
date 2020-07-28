@@ -105,9 +105,9 @@ function main() {
     if (myTab2.getTabVisibility()) {
         slidervalue = MDX.slider("slider", sx, sy + 33, slidervalue[1], -90, 5);
         //heat.Print(slidervalue[0] + "\n");
-        sliderfloat = MDX.sliderfloat("float", sx, sy + 63, sliderfloat[1], 0, 1);
+        sliderfloat = MDX.sliderfloat("float", sx, sy + 73, sliderfloat[1], 0, 1);
         //Cheat.Print(sliderfloat[0] + "\n");
-        var colorpicker = MDX.colorpicker("color picker", sx, sy + 93, colorpickercolor, colorpickeropened);
+        var colorpicker = MDX.colorpicker("color picker", sx, sy + 123, colorpickercolor, colorpickeropened);
         if (colorpicker != undefined) {
             if (colorpicker == "closed") {
                 colorpickeropened = !colorpickeropened;
