@@ -253,6 +253,26 @@ function color_picker(x, y, w, h, color) {
     );
 
     //Draw preview of the selected color and transparency slider
+    Render.FilledRect(alpha_slider.x, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 2, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 4, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 6, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 8, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 1, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 3, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 5, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 7, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 9, alpha_slider.y + alpha_slider.h / 2, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x, alpha_slider.y, alpha_slider.w / 10, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 2, alpha_slider.y, alpha_slider.w / 10, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 4, alpha_slider.y, alpha_slider.w / 10, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 6, alpha_slider.y, alpha_slider.w / 10, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 8, alpha_slider.y, alpha_slider.w / 10, alpha_slider.h / 2, [200, 200, 200, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 1, alpha_slider.y, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 3, alpha_slider.y, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 5, alpha_slider.y, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 7, alpha_slider.y, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [255, 255, 255, 100]);
+    Render.FilledRect(alpha_slider.x + (alpha_slider.w / 10) * 9, alpha_slider.y, alpha_slider.w / 10 + 1, alpha_slider.h / 2, [255, 255, 255, 100]);
     Render.Rect(alpha_slider.x, alpha_slider.y, alpha_slider.w, alpha_slider.h, [0, 0, 0, 255]);
     var alpha = 255 / (picker.w);
 
