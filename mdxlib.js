@@ -1,4 +1,5 @@
 //#region Global variables
+var configCMD = "xbox_throttlespoof";
 var r = 80;
 var g = 110;
 var b = 200;
@@ -140,41 +141,6 @@ function HSVtoRGB(h, s, v) {
             }
     }
     return { r: r * 255, g: g * 255, b: b * 255 };
-}
-
-function RGBToHSV(red, green, blue) {
-    var hue = 0, saturation = 0, value = 0;
-
-    var min_value = Math.min(red, green, blue);
-    var max_value = Math.max(red, green, blue);
-
-    value = max_value;
-
-    var value_delta = max_value - min_value;
-
-    Cheat.Print(value_delta + " " + max_value + "\n")
-    if (max_value != 0) {
-        saturation = value_delta / max_value;
-    } else {
-        saturation = 0;
-        hue = -1;
-        return { h: hue, s: saturation * 100, v: value / 2.55 };
-    }
-
-    if (red == max_value) {
-        hue = (green - blue) / value_delta;
-    } else if (green == max_value) {
-        hue = 2 + (blue - red) / value_delta;
-    } else {
-        hue = 4 + (red - green) / value_delta;
-    }
-
-    hue = hue * 60;
-    if (hue < 0) {
-        hue = hue + 360;
-    }
-
-    return { h: hue, s: saturation * 100, v: value / 2.55 };
 }
 
 function create_color(h, s, v, a) {
@@ -621,7 +587,8 @@ function MDXslider(text, gx, gy, val, min, max) {
     }
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
-    Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
+    Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
+    Render.StringCustom(gx + val, gy + 25, 1, "" + relval, [255, 255, 255, 150], font);
 
     var valueArray = new Array(2);
     valueArray[0] = relval;
@@ -687,7 +654,8 @@ function MDXsliderfloat(text, gx, gy, val, min, max) {
     }
     Render.Rect(gx, gy + 12, 90, 10, [0, 0, 0, 255]);
     Render.Rect(gx - 1, gy + 11, 92, 12, [27, 27, 27, 255]);
-    Render.StringCustom(gx, texty, 0, text + " / " + relval, [255, 255, 255, 150], font);
+    Render.StringCustom(gx, texty, 0, text, [255, 255, 255, 150], font);
+    Render.StringCustom(gx + val, gy + 25, 1, "" + relval, [255, 255, 255, 150], font);
 
     var valueArray = new Array(2);
     valueArray[0] = relval;
@@ -892,24 +860,20 @@ function MDXhotkey(text, gx, gy, keyNum) {
 }
 
 function MDXsaveconfig(json) {
-    var config = Base64.encode(json);
-    Cheat.ExecuteCommand("xbox_throttlespoof " + config);
+    Cheat.ExecuteCommand(configCMD + " " + Base64.encode(json));
 }
 
 function MDXloadconfig() {
-    var config = Base64.decode(Convar.GetString("xbox_throttlespoof"));
-    return config;
+    return Base64.decode(Convar.GetString(configCMD));
 }
 
 function MDXimportconfig(config) {
     Cheat.ExecuteCommand("exec " + config);
-    var loadconfig = MDXloadconfig();
-    return loadconfig;
+    return MDXloadconfig();
 }
 
 function MDXexportconfig() {
-    var cmd = Convar.GetString("xbox_throttlespoof");
-    Cheat.Print(cmd + "\n");
+    Cheat.Print(Convar.GetString(configCMD) + "\n");
 }
 
 //#region Exported variables
