@@ -3,8 +3,8 @@ var configCMD = "xbox_throttlespoof";
 var r = 80;
 var g = 110;
 var b = 200;
-var agx = 200;
-var agy = 200;
+var agx = 5;
+var agy = 5;
 var biggestwidth = 0;
 var globaltime = Globals.Realtime();
 var savedcolor = undefined;
@@ -12,6 +12,9 @@ var keyCodes = [0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B
 var keyChar = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var extraKeyCodes = [0x01, 0x02, 0x04, 0x05, 0x06, 0x09, 0x0D, 0x10, 0xA1, 0x11, 0x12, 0x14, 0x1B, 0x20, 0x24, 0x25, 0x26, 0x27, 0x28, 0x2D, 0x2E];
 var extraKeyChar = ["m1", "m2", "m3", "x1", "x2", "tab", "ent", "shf", "ctl", "alt", "cap", "esc", "spc", "hom", "lft", "up", "rgt", "dwn", "ins", "del"];
+var first_click = {};
+var last = {};
+var dragging = false;
 //#endregion
 
 //#region Javascript function definitions
@@ -30,62 +33,60 @@ if (!Object.entries) {
 
 //#region extended color picker by Brotgeschmack
 function HUEtoRGB(h) {
-    var r = 0, g = 0, b = 0;
+    var r = 0,
+        g = 0,
+        b = 0;
 
     var z = Math.floor(h / 60);
     var hi = z % 6;
     var f = h / 60 - z;
 
     switch (hi) {
-        case 0:
-            {
-                r = 1;
-                g = f;
-                b = 0;
-                break;
-            }
-        case 1:
-            {
-                r = (1 - f);
-                g = 1;
-                b = 0;
-                break;
-            }
-        case 2:
-            {
-                r = 0;
-                g = 1;
-                b = f;
-                break;
-            }
-        case 3:
-            {
-                r = 0;
-                g = (1 - f);
-                b = 1;
-                break;
-            }
-        case 4:
-            {
-                r = f;
-                g = 0;
-                b = 1;
-                break
-            }
-        case 5:
-            {
-                r = 1;
-                g = 0;
-                b = (1 - f);
-                break;
-            }
+        case 0: {
+            r = 1;
+            g = f;
+            b = 0;
+            break;
+        }
+        case 1: {
+            r = (1 - f);
+            g = 1;
+            b = 0;
+            break;
+        }
+        case 2: {
+            r = 0;
+            g = 1;
+            b = f;
+            break;
+        }
+        case 3: {
+            r = 0;
+            g = (1 - f);
+            b = 1;
+            break;
+        }
+        case 4: {
+            r = f;
+            g = 0;
+            b = 1;
+            break
+        }
+        case 5: {
+            r = 1;
+            g = 0;
+            b = (1 - f);
+            break;
+        }
     }
 
     return [r * 255, g * 255, b * 255, 255]
 }
 
 function HSVtoRGB(h, s, v) {
-    var r = 0, g = 0, b = 0;
+    var r = 0,
+        g = 0,
+        b = 0;
 
     var tempS = s / 100;
     var tempV = v / 100;
@@ -97,63 +98,72 @@ function HSVtoRGB(h, s, v) {
     var t = (tempV * (1 - (1 - f) * tempS));
 
     switch (hi) {
-        case 0:
-            {
-                r = tempV;
-                g = t;
-                b = p;
-                break;
-            }
-        case 1:
-            {
-                r = q;
-                g = tempV;
-                b = p;
-                break;
-            }
-        case 2:
-            {
-                r = p;
-                g = tempV;
-                b = t;
-                break;
-            }
-        case 3:
-            {
-                r = p;
-                g = q;
-                b = tempV;
-                break;
-            }
-        case 4:
-            {
-                r = t;
-                g = p;
-                b = tempV;
-                break
-            }
-        case 5:
-            {
-                r = tempV;
-                g = p;
-                b = q;
-                break;
-            }
+        case 0: {
+            r = tempV;
+            g = t;
+            b = p;
+            break;
+        }
+        case 1: {
+            r = q;
+            g = tempV;
+            b = p;
+            break;
+        }
+        case 2: {
+            r = p;
+            g = tempV;
+            b = t;
+            break;
+        }
+        case 3: {
+            r = p;
+            g = q;
+            b = tempV;
+            break;
+        }
+        case 4: {
+            r = t;
+            g = p;
+            b = tempV;
+            break
+        }
+        case 5: {
+            r = tempV;
+            g = p;
+            b = q;
+            break;
+        }
     }
-    return { r: r * 255, g: g * 255, b: b * 255 };
+    return {
+        r: r * 255,
+        g: g * 255,
+        b: b * 255
+    };
 }
 
 function create_color(h, s, v, a) {
-    return { h: h, s: s, v: v, a: a };
+    return {
+        h: h,
+        s: s,
+        v: v,
+        a: a
+    };
 }
 
 function get_cursor_positon() {
     var input = Input.GetCursorPosition();
-    return { x: input[0], y: input[1] };
+    return {
+        x: input[0],
+        y: input[1]
+    };
 }
 
 function in_boundary(cursor, x1, y1, x2, y2) {
-    var boundary = { x: cursor.x, y: cursor.y };
+    var boundary = {
+        x: cursor.x,
+        y: cursor.y
+    };
     if (cursor.x < x1)
         boundary.x = x1
     if (cursor.y < y1)
@@ -164,12 +174,23 @@ function in_boundary(cursor, x1, y1, x2, y2) {
         boundary.y = y1 + y2
 
     if (cursor.x >= x1 && cursor.y >= y1 && cursor.x <= x1 + x2 && cursor.y <= y1 + y2)
-        return { in_boundary: true, boundary: boundary };
+        return {
+            in_boundary: true,
+            boundary: boundary
+        };
 
-    return { in_boundary: false, boundary: boundary };
+    return {
+        in_boundary: false,
+        boundary: boundary
+    };
 }
 
-var keys_down = { picker: false, hue: false, alpha: false, outside: false };
+var keys_down = {
+    picker: false,
+    hue: false,
+    alpha: false,
+    outside: false
+};
 
 function color_picker(x, y, w, h, color) {
     var cursor = get_cursor_positon();
@@ -320,10 +341,23 @@ function color_picker(x, y, w, h, color) {
 
     //Reset key states
     if (!Input.IsKeyPressed(1)) {
-        keys_down = { picker: false, hue: false, alpha: false, outside: false };
+        keys_down = {
+            picker: false,
+            hue: false,
+            alpha: false,
+            outside: false
+        };
     }
 
-    return { h: color.h, s: color.s, v: color.v, r: rgb.r, g: rgb.b, b: rgb.b, a: color.a };
+    return {
+        h: color.h,
+        s: color.s,
+        v: color.v,
+        r: rgb.r,
+        g: rgb.b,
+        b: rgb.b,
+        a: color.a
+    };
 }
 //#endregion
 
@@ -421,24 +455,24 @@ var Base64 = {
     }
 }
 
-function MDXmenu(col_title, white_title, gx, gy, gwidth, gheight, passed_r, passed_g, passed_b, bg_col_top, bg_col_bottom) {
+function MDXmenu(col_title, white_title, gwidth, gheight, passed_r, passed_g, passed_b, bg_col_top, bg_col_bottom) {
     if (typeof (bg_col_top) === 'undefined' || typeof (bg_col_bottom) === 'undefined') {
-        Render.FilledRect(gx, gy, gwidth, gheight, [9, 9, 9, 255]);
+        Render.FilledRect(agx, agy, gwidth, gheight, [9, 9, 9, 255]);
     } else {
-        Render.GradientRect(gx, gy, gwidth, gheight, 0, [bg_col_top[0], bg_col_top[1], bg_col_top[2], 255], [bg_col_bottom[0], bg_col_bottom[1], bg_col_bottom[2], 255]);
+        Render.GradientRect(agx, agy, gwidth, gheight, 0, [bg_col_top[0], bg_col_top[1], bg_col_top[2], 255], [bg_col_bottom[0], bg_col_bottom[1], bg_col_bottom[2], 255]);
     }
     r = passed_r;
     g = passed_g;
     b = passed_b;
-    Render.Rect(gx, gy, gwidth, gheight, [0, 0, 0, 255]);
-    Render.Rect(gx + 1, gy + 1, gwidth - 2, gheight - 2, [27, 27, 27, 255]);
-    Render.Rect(gx + 1, gy + 1, gwidth - 2, 20, [27, 27, 27, 255]);
-    Render.Rect(gx + 1, gy + 20, 132, gheight - 21, [27, 27, 27, 255]);
+    Render.Rect(agx, agy, gwidth, gheight, [0, 0, 0, 255]);
+    Render.Rect(agx + 1, agy + 1, gwidth - 2, gheight - 2, [27, 27, 27, 255]);
+    Render.Rect(agx + 1, agy + 1, gwidth - 2, 20, [27, 27, 27, 255]);
+    Render.Rect(agx + 1, agy + 20, 132, gheight - 21, [27, 27, 27, 255]);
     var font = Render.AddFont("Tahoma", 7, 700);
-    Render.StringCustom(gx + 7, gy + 5, 0, col_title, [r, g, b, 255], font);
+    Render.StringCustom(agx + 7, agy + 5, 0, col_title, [r, g, b, 255], font);
     var titlesize = Render.TextSizeCustom(col_title, font);
     var titlesizex = titlesize[0];
-    Render.StringCustom(gx + 7 + titlesizex + 1, gy + 5, 0, white_title, [255, 255, 255, 155], font);
+    Render.StringCustom(agx + 7 + titlesizex + 1, agy + 5, 0, white_title, [255, 255, 255, 155], font);
 }
 
 //#region MDXTab
@@ -542,24 +576,32 @@ function MDXtab(mdxTab) {
 
 //#endregion
 
-function MDXdrag(gx, gy) {
-    var curPos = Input.GetCursorPosition();
-    var curx = curPos[0];
-    var cury = curPos[1];
-    if (Input.IsKeyPressed(0x01) && curx > gx && curx < (gx + 500) && cury > gy && cury < (gy + 20)) {
-        var newCurPos = Input.GetCursorPosition();
-        var newx = newCurPos[0];
-        var newy = newCurPos[1];
-        return {
-            x: newx,
-            y: newy
+function MDXdrag() {
+    const mouse = {
+        x: Input.GetCursorPosition()[0],
+        y: Input.GetCursorPosition()[1]
+    }
+    if (!Input.IsKeyPressed(0x01))
+        dragging = false;
+    if (Input.IsKeyPressed(0x01) && mouse.x > agx && mouse.x < (agx + 500) && mouse.y > agy && mouse.y < (agy + 20) || dragging) {
+        if (!dragging) {
+            first_click = Input.GetCursorPosition();
         }
+        dragging = true;
+        deltax = mouse.x - (mouse.x - last.x);
+        agx = deltax + (mouse.x - first_click[0]);
+        deltay = mouse.y - (mouse.y - last.y);
+        agy = deltay + (mouse.y - first_click[1]);
     } else {
-        return {
-            x: 200,
-            y: 200
+        dragging = false;
+        first_click = Input.GetCursorPosition();
+        last = {
+            x: agx,
+            y: agy
         }
     }
+    exports.agx = agx;
+    exports.agy = agy;
 }
 
 function MDXcheckbox(text, gx, gy, enabled) {
@@ -896,11 +938,6 @@ function MDXexportconfig() {
     Cheat.Print(Convar.GetString(configCMD) + "\n");
 }
 
-//#region Exported variables
-exports.agx = agx;
-exports.agy = agy;
-//#endregion
-
 //#region Exported functions
 exports.menu = MDXmenu;
 exports.tab = MDXtab;
@@ -921,4 +958,9 @@ exports.exportconfig = MDXexportconfig;
 exports.hotkey = MDXhotkey;
 exports.create_color = create_color;
 exports.base = Base64;
+//#endregion
+
+//#region Exported variables
+exports.agx = agx;
+exports.agy = agy;
 //#endregion
